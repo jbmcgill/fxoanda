@@ -1,0 +1,10 @@
+[package]
+name = "fxoanda_serdes"
+version = "0.1.0"
+authors = ["James McGill <jbmcgill@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+serde = "1.0.83"
+chrono = {version = "0.4.6", features = ["serde"] }
+time = "*"

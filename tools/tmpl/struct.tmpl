@@ -1,0 +1,24 @@
+
+#[derive(Debug,Serialize,Deserialize)]
+pub struct {{ name }} { {% for o in params %}
+
+  {{ o['comment'] | safe }}  #[serde(default)]
+  #[serde(rename="{{ o['name'] }}", skip_serializing_if="Option::is_none" {% if o['type'] == 'f32' %}, with="serfloats" {% elif o['type'] == 'DateTime<Utc>' %}, with="serdates" {% endif %})]
+  pub {{ o['snake'] }} : Option<{{ o['type'] }}>,{% endfor %}
+}
+impl {{ name }} {
+  pub fn new() -> {{ name }} {
+    {{ name }} { {% for o in params %}
+      {{ o['snake'] }} : None,{% endfor %}
+    }
+  }{% for o in params %}
+  
+  {{ o['comment'] | safe }}  /// - param {{ o['type'] }}
+  /// - return {{ name }}
+  pub fn with_{{ o['snake'] }} ( mut self, x : {{ o['type'] | safe }} ) -> Self {
+    self.{{ o['snake'] }} = Some(x);
+    self
+  }
+{% endfor %}
+}
+

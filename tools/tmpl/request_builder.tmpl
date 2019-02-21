@@ -1,0 +1,92 @@
+
+pub mod {{ snake }}{
+	use chrono::prelude::*;
+	use std::error::Error;
+	use Client;
+	use fxoanda_definitions::*;
+	use fxoanda_serdes::*;
+
+	{% for key, name in [('header','Head'),('path','Path'),('body','Body'),('query','Query')] %}
+	#[derive(Debug,Serialize,Deserialize)]
+	struct Request{{ name }} { {% for o in params[key] %}
+
+	  #[serde(rename="{{ o['name'] }}", skip_serializing_if="Option::is_none" {% if o['type'] == 'f32' %}, with="serfloats" {% elif o['type'] == 'DateTime<Utc>' %}, with="serdates" {% endif %})]
+	  pub {{ o['snake'] }} : Option<{{ o['type'] }}>,{% endfor %}
+	}
+	impl Request{{ name }} {
+	  fn new() -> Request{{ name }} {
+	    Request{{ name }} { {% for o in params[key] %}
+	      {{ o['snake'] }} : None,{% endfor %}
+	    }
+	  }
+	}
+	{% endfor %}
+
+	{{ comment | safe }}
+	#[derive(Debug, Serialize, Deserialize)]
+	pub struct {{ name }}Request { 
+	  #[serde(skip_serializing)]
+	  uri: String,
+	  header: RequestHead,
+	  body: RequestBody,
+	  path: RequestPath,
+	  query: RequestQuery,
+	}
+
+	impl {{ name }}Request {
+	  pub fn new() -> {{ name }}Request {
+	    {{ name }}Request {
+	      uri: String::from("/v3{{ url }}"),
+	      header: RequestHead::new(),
+	      body: RequestBody::new(),
+	      path: RequestPath::new(),
+	      query: RequestQuery::new(),
+	    }
+	  }
+	  pub fn with_uri(mut self, x: String) -> Self{
+	    self.uri = x;
+	    self
+	  }
+
+	{% for o in params['path'] + params['header'] + params['body'] + params['query'] %}
+	  {{ o['comment'] | safe }}  /// - param {{ o['type'] }}
+	  /// - return {{ name }}Request
+	  pub fn with_{{ o['snake'] }} ( mut self, x : {{ o['type'] | safe }} ) -> Self {
+	    self.{{ o['in'] }}.{{ o['snake'] }} = Some(x);
+	    self
+	  }
+	{% endfor %}
+
+		pub fn remote(self, client: &Client) -> Result<{{ name }}Response, Box<Error>> {
+	    let uri = self.uri.clone(){% for o in params['path'] %}
+		      .replace("{{ "{" }}{{ o['name'] }}{{ "}" }}", &self.path.{{ o['snake'] }}.unwrap()){% endfor %};
+	    let url = format!("https://{host}{uri}", host=client.host, uri=uri);
+		  let res = client.reqwest.{{ method }}(&url)
+				      .query(&self.query){% if method in ["put","post","patch"] %}.json::<RequestBody>(&self.body){% endif %}
+						.bearer_auth(&client.authentication)
+						  .send();
+	    match res {
+	      Err(e) => Err(Box::new(e)),
+	      Ok(mut response) => { 
+		match response.json::<{{ name }}Response>() {
+		  Err(e) => Err(Box::new(e)),
+		  Ok(mut j) => Ok(j),
+		}
+	      }
+	    }
+		}
+	}
+
+	pub type {{ name }}Response = {{ name }}Response200Body;
+
+	{% for response in responses %}
+	{% for section_name, section_key in [('Header','headers'),('Body','schema')] %}
+	{{ response['comment'] }}#[derive(Debug,Serialize,Deserialize)]
+	pub struct {{ name }}Response{{ response['code'] }}{{ section_name }} {
+	{% for o in response['params'][section_key] %}
+	  {{ o['comment'] }} #[serde(rename="{{ o['name'] }}", skip_serializing_if="Option::is_none" {% if o['type'] == 'f32' %}, with="serfloats" {% elif o['type'] == 'DateTime<Utc>' %}, with="serdates" {% endif %})]
+	  pub {{ o['snake'] }} : Option<{{ o['type'] }}>,{% endfor %}
+	}
+	{% endfor %}
+	{% endfor %}
+}

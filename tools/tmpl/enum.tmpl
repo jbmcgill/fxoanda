@@ -1,0 +1,25 @@
+
+{{ comment | safe }}
+#[derive(Debug, Serialize, Deserialize)]
+pub enum {{ name }} { {% for variant in variants %}
+    #[serde(rename = "{{ variant['name'] }}")]
+    {{ variant['camel'] }}, {% endfor %}
+}
+
+
+impl FromStr for {{ name }} {
+    type Err = ();
+    fn from_str(s: &str) -> Result<{{ name }}, ()> {
+        match s { {% for variant in variants %}
+            "{{variant['name']}}" => Ok({{ name }}::{{ variant['camel'] }}), {% endfor %}
+            _ => Err(()),
+        }
+    }
+}
+
+impl std::fmt::Display for {{ name }} {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+      write!(f, "{:?}", self)
+    }
+}
+
