@@ -10,7 +10,7 @@ serde = "1.0.83"
 serde_derive = "1.0.83"
 chrono = {version = "0.4.6", features = ["serde"] }
 time = "*"
-fxoanda_definitions = {path = "fxoanda_definitions/"}
-fxoanda_serdes = {path = "fxoanda_serdes/"}
+fxoanda_definitions = {path = "fxoanda_definitions/", version="0.1.0"}
+fxoanda_serdes = {path = "fxoanda_serdes/", version="0.1.0"}
 
 
