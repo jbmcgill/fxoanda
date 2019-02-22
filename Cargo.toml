@@ -2,6 +2,8 @@
 name = "fxoanda"
 version = "0.1.0"
 authors = ["James McGill <jbmcgill@gmail.com>"]
+description = "Library to conduct currency conversion with the Oanda API"
+license = "MIT/Apache-2.0"
 
 [dependencies]
 reqwest = "0.9.5"
@@ -9,7 +11,7 @@ serde_json = "1.0"
 serde = "1.0.83"
 serde_derive = "1.0.83"
 chrono = {version = "0.4.6", features = ["serde"] }
-time = "*"
+time = "0.1.42"
 fxoanda_definitions = {path = "fxoanda_definitions/", version="0.1.0"}
 fxoanda_serdes = {path = "fxoanda_serdes/", version="0.1.0"}
 
