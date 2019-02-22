@@ -3,6 +3,8 @@ name = "fxoanda_serdes"
 version = "0.1.0"
 authors = ["James McGill <jbmcgill@gmail.com>"]
 edition = "2018"
+description = "Library to conduct currency conversion with the Oanda API"
+license = "MIT/BSD"
 
 [dependencies]
 serde = "1.0.83"
