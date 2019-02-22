@@ -9,4 +9,4 @@ license = "MIT/Apache-2.0"
 [dependencies]
 serde = "1.0.83"
 chrono = {version = "0.4.6", features = ["serde"] }
-time = "*"
+time = "0.1.42"
