@@ -1,6 +1,6 @@
 [package]
 name = "fxoanda"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["James McGill <jbmcgill@gmail.com>"]
 description = "Library to conduct currency conversion with the Oanda API"
 license = "MIT/Apache-2.0"
