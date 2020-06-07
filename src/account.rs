@@ -109,7 +109,7 @@ pub mod list_positions {
                 .send();
             match res {
                 Err(e) => Err(Box::new(e)),
-                Ok(mut response) => match response.json::<ListPositionsResponse>() {
+                Ok(response) => match response.json::<ListPositionsResponse>() {
                     Err(e) => Err(Box::new(e)),
                     Ok(j) => Ok(j),
                 },
@@ -250,7 +250,7 @@ pub mod list_open_positions {
                 .send();
             match res {
                 Err(e) => Err(Box::new(e)),
-                Ok(mut response) => match response.json::<ListOpenPositionsResponse>() {
+                Ok(response) => match response.json::<ListOpenPositionsResponse>() {
                     Err(e) => Err(Box::new(e)),
                     Ok(j) => Ok(j),
                 },
@@ -408,7 +408,7 @@ pub mod get_position {
                 .send();
             match res {
                 Err(e) => Err(Box::new(e)),
-                Ok(mut response) => match response.json::<GetPositionResponse>() {
+                Ok(response) => match response.json::<GetPositionResponse>() {
                     Err(e) => Err(Box::new(e)),
                     Ok(j) => Ok(j),
                 },
@@ -646,7 +646,7 @@ pub mod close_position {
                 .send();
             match res {
                 Err(e) => Err(Box::new(e)),
-                Ok(mut response) => match response.json::<ClosePositionResponse>() {
+                Ok(response) => match response.json::<ClosePositionResponse>() {
                     Err(e) => Err(Box::new(e)),
                     Ok(j) => Ok(j),
                 },
@@ -925,7 +925,7 @@ pub mod list_trades {
                 .send();
             match res {
                 Err(e) => Err(Box::new(e)),
-                Ok(mut response) => match response.json::<ListTradesResponse>() {
+                Ok(response) => match response.json::<ListTradesResponse>() {
                     Err(e) => Err(Box::new(e)),
                     Ok(j) => Ok(j),
                 },
@@ -1083,7 +1083,7 @@ pub mod list_open_trades {
                 .send();
             match res {
                 Err(e) => Err(Box::new(e)),
-                Ok(mut response) => match response.json::<ListOpenTradesResponse>() {
+                Ok(response) => match response.json::<ListOpenTradesResponse>() {
                     Err(e) => Err(Box::new(e)),
                     Ok(j) => Ok(j),
                 },
@@ -1255,7 +1255,7 @@ pub mod get_trade {
                 .send();
             match res {
                 Err(e) => Err(Box::new(e)),
-                Ok(mut response) => match response.json::<GetTradeResponse>() {
+                Ok(response) => match response.json::<GetTradeResponse>() {
                     Err(e) => Err(Box::new(e)),
                     Ok(j) => Ok(j),
                 },
@@ -1446,7 +1446,7 @@ pub mod close_trade {
                 .send();
             match res {
                 Err(e) => Err(Box::new(e)),
-                Ok(mut response) => match response.json::<CloseTradeResponse>() {
+                Ok(response) => match response.json::<CloseTradeResponse>() {
                     Err(e) => Err(Box::new(e)),
                     Ok(j) => Ok(j),
                 },
@@ -1669,7 +1669,7 @@ pub mod set_trade_client_extensions {
                 .send();
             match res {
                 Err(e) => Err(Box::new(e)),
-                Ok(mut response) => match response.json::<SetTradeClientExtensionsResponse>() {
+                Ok(response) => match response.json::<SetTradeClientExtensionsResponse>() {
                     Err(e) => Err(Box::new(e)),
                     Ok(j) => Ok(j),
                 },
@@ -1905,7 +1905,7 @@ pub mod set_trade_dependent_orders {
                 .send();
             match res {
                 Err(e) => Err(Box::new(e)),
-                Ok(mut response) => match response.json::<SetTradeDependentOrdersResponse>() {
+                Ok(response) => match response.json::<SetTradeDependentOrdersResponse>() {
                     Err(e) => Err(Box::new(e)),
                     Ok(j) => Ok(j),
                 },
@@ -2103,7 +2103,7 @@ pub mod list_accounts {
                 .send();
             match res {
                 Err(e) => Err(Box::new(e)),
-                Ok(mut response) => match response.json::<ListAccountsResponse>() {
+                Ok(response) => match response.json::<ListAccountsResponse>() {
                     Err(e) => Err(Box::new(e)),
                     Ok(j) => Ok(j),
                 },
@@ -2257,7 +2257,7 @@ pub mod get_account {
                 .send();
             match res {
                 Err(e) => Err(Box::new(e)),
-                Ok(mut response) => match response.json::<GetAccountResponse>() {
+                Ok(response) => match response.json::<GetAccountResponse>() {
                     Err(e) => Err(Box::new(e)),
                     Ok(j) => Ok(j),
                 },
@@ -2413,7 +2413,7 @@ pub mod get_account_summary {
                 .send();
             match res {
                 Err(e) => Err(Box::new(e)),
-                Ok(mut response) => match response.json::<GetAccountSummaryResponse>() {
+                Ok(response) => match response.json::<GetAccountSummaryResponse>() {
                     Err(e) => Err(Box::new(e)),
                     Ok(j) => Ok(j),
                 },
@@ -2572,7 +2572,7 @@ pub mod get_account_instruments {
                 .send();
             match res {
                 Err(e) => Err(Box::new(e)),
-                Ok(mut response) => match response.json::<GetAccountInstrumentsResponse>() {
+                Ok(response) => match response.json::<GetAccountInstrumentsResponse>() {
                     Err(e) => Err(Box::new(e)),
                     Ok(j) => Ok(j),
                 },
@@ -2759,7 +2759,7 @@ pub mod configure_account {
                 .send();
             match res {
                 Err(e) => Err(Box::new(e)),
-                Ok(mut response) => match response.json::<ConfigureAccountResponse>() {
+                Ok(response) => match response.json::<ConfigureAccountResponse>() {
                     Err(e) => Err(Box::new(e)),
                     Ok(j) => Ok(j),
                 },
@@ -2933,7 +2933,7 @@ pub mod get_account_changes {
                 .send();
             match res {
                 Err(e) => Err(Box::new(e)),
-                Ok(mut response) => match response.json::<GetAccountChangesResponse>() {
+                Ok(response) => match response.json::<GetAccountChangesResponse>() {
                     Err(e) => Err(Box::new(e)),
                     Ok(j) => Ok(j),
                 },
@@ -3170,7 +3170,7 @@ pub mod list_transactions {
                 .send();
             match res {
                 Err(e) => Err(Box::new(e)),
-                Ok(mut response) => match response.json::<ListTransactionsResponse>() {
+                Ok(response) => match response.json::<ListTransactionsResponse>() {
                     Err(e) => Err(Box::new(e)),
                     Ok(j) => Ok(j),
                 },
@@ -3377,7 +3377,7 @@ pub mod get_transaction {
                 .send();
             match res {
                 Err(e) => Err(Box::new(e)),
-                Ok(mut response) => match response.json::<GetTransactionResponse>() {
+                Ok(response) => match response.json::<GetTransactionResponse>() {
                     Err(e) => Err(Box::new(e)),
                     Ok(j) => Ok(j),
                 },
@@ -3576,7 +3576,7 @@ pub mod get_transaction_range {
                 .send();
             match res {
                 Err(e) => Err(Box::new(e)),
-                Ok(mut response) => match response.json::<GetTransactionRangeResponse>() {
+                Ok(response) => match response.json::<GetTransactionRangeResponse>() {
                     Err(e) => Err(Box::new(e)),
                     Ok(j) => Ok(j),
                 },
@@ -3748,7 +3748,7 @@ pub mod get_transactions_since_id {
                 .send();
             match res {
                 Err(e) => Err(Box::new(e)),
-                Ok(mut response) => match response.json::<GetTransactionsSinceIdResponse>() {
+                Ok(response) => match response.json::<GetTransactionsSinceIdResponse>() {
                     Err(e) => Err(Box::new(e)),
                     Ok(j) => Ok(j),
                 },
@@ -3889,7 +3889,7 @@ pub mod stream_transactions {
                 .send();
             match res {
                 Err(e) => Err(Box::new(e)),
-                Ok(mut response) => match response.json::<StreamTransactionsResponse>() {
+                Ok(response) => match response.json::<StreamTransactionsResponse>() {
                     Err(e) => Err(Box::new(e)),
                     Ok(j) => Ok(j),
                 },
@@ -4118,7 +4118,7 @@ pub mod get_prices {
                 .send();
             match res {
                 Err(e) => Err(Box::new(e)),
-                Ok(mut response) => match response.json::<GetPricesResponse>() {
+                Ok(response) => match response.json::<GetPricesResponse>() {
                     Err(e) => Err(Box::new(e)),
                     Ok(j) => Ok(j),
                 },
@@ -4325,7 +4325,7 @@ pub mod stream_pricing {
                 .send();
             match res {
                 Err(e) => Err(Box::new(e)),
-                Ok(mut response) => match response.json::<StreamPricingResponse>() {
+                Ok(response) => match response.json::<StreamPricingResponse>() {
                     Err(e) => Err(Box::new(e)),
                     Ok(j) => Ok(j),
                 },
@@ -4662,7 +4662,7 @@ pub mod get_account_instrument_candles {
                 .send();
             match res {
                 Err(e) => Err(Box::new(e)),
-                Ok(mut response) => match response.json::<GetAccountInstrumentCandlesResponse>() {
+                Ok(response) => match response.json::<GetAccountInstrumentCandlesResponse>() {
                     Err(e) => Err(Box::new(e)),
                     Ok(j) => Ok(j),
                 },
@@ -4832,7 +4832,7 @@ pub mod create_market_order {
                 .send();
             match res {
                 Err(e) => Err(Box::new(e)),
-                Ok(mut response) => match response.json::<CreateMarketOrderResponse>() {
+                Ok(response) => match response.json::<CreateMarketOrderResponse>() {
                     Err(e) => Err(Box::new(e)),
                     Ok(j) => Ok(j),
                 },
@@ -5040,7 +5040,7 @@ pub mod create_limit_order {
                 .send();
             match res {
                 Err(e) => Err(Box::new(e)),
-                Ok(mut response) => match response.json::<CreateLimitOrderResponse>() {
+                Ok(response) => match response.json::<CreateLimitOrderResponse>() {
                     Err(e) => Err(Box::new(e)),
                     Ok(j) => Ok(j),
                 },
@@ -5248,7 +5248,7 @@ pub mod create_stop_order {
                 .send();
             match res {
                 Err(e) => Err(Box::new(e)),
-                Ok(mut response) => match response.json::<CreateStopOrderResponse>() {
+                Ok(response) => match response.json::<CreateStopOrderResponse>() {
                     Err(e) => Err(Box::new(e)),
                     Ok(j) => Ok(j),
                 },
@@ -5512,7 +5512,7 @@ pub mod list_orders {
                 .send();
             match res {
                 Err(e) => Err(Box::new(e)),
-                Ok(mut response) => match response.json::<ListOrdersResponse>() {
+                Ok(response) => match response.json::<ListOrdersResponse>() {
                     Err(e) => Err(Box::new(e)),
                     Ok(j) => Ok(j),
                 },
@@ -5670,7 +5670,7 @@ pub mod list_pending_orders {
                 .send();
             match res {
                 Err(e) => Err(Box::new(e)),
-                Ok(mut response) => match response.json::<ListPendingOrdersResponse>() {
+                Ok(response) => match response.json::<ListPendingOrdersResponse>() {
                     Err(e) => Err(Box::new(e)),
                     Ok(j) => Ok(j),
                 },
@@ -5842,7 +5842,7 @@ pub mod get_order {
                 .send();
             match res {
                 Err(e) => Err(Box::new(e)),
-                Ok(mut response) => match response.json::<GetOrderResponse>() {
+                Ok(response) => match response.json::<GetOrderResponse>() {
                     Err(e) => Err(Box::new(e)),
                     Ok(j) => Ok(j),
                 },
@@ -6044,7 +6044,7 @@ pub mod replace_order {
                 .send();
             match res {
                 Err(e) => Err(Box::new(e)),
-                Ok(mut response) => match response.json::<ReplaceOrderResponse>() {
+                Ok(response) => match response.json::<ReplaceOrderResponse>() {
                     Err(e) => Err(Box::new(e)),
                     Ok(j) => Ok(j),
                 },
@@ -6278,7 +6278,7 @@ pub mod cancel_order {
                 .send();
             match res {
                 Err(e) => Err(Box::new(e)),
-                Ok(mut response) => match response.json::<CancelOrderResponse>() {
+                Ok(response) => match response.json::<CancelOrderResponse>() {
                     Err(e) => Err(Box::new(e)),
                     Ok(j) => Ok(j),
                 },
@@ -6501,7 +6501,7 @@ pub mod set_order_client_extensions {
                 .send();
             match res {
                 Err(e) => Err(Box::new(e)),
-                Ok(mut response) => match response.json::<SetOrderClientExtensionsResponse>() {
+                Ok(response) => match response.json::<SetOrderClientExtensionsResponse>() {
                     Err(e) => Err(Box::new(e)),
                     Ok(j) => Ok(j),
                 },

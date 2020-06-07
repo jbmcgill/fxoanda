@@ -15,6 +15,13 @@ top.
 
 ## Example usage
 
+```toml
+# in your Cargo.toml
+reqwest = {version = "0.10.6", features = ["blocking","json"]}
+fxoanda = 0.1.3
+
+```
+
 ```rust
 use fxoanda::*;
 
@@ -23,7 +30,7 @@ let api_host = env::var("OANDA_HOST").expect("expected OANDA_HOST environment va
 
 let client = fxoanda::Client {
                host: String::from(api_host),
-               reqwest: reqwest::Client::new(),
+               reqwest: reqwest::blocking::Client::new(),
                authentication: String::from(api_key),
              };
 match fxoanda::GetInstrumentCandlesRequest::new()

@@ -68,7 +68,7 @@ pub mod {{ snake }}{
 						  .send();
 	    match res {
 	      Err(e) => Err(Box::new(e)),
-	      Ok(mut response) => { 
+	      Ok(response) => { 
 		match response.json::<{{ name }}Response>() {
 		  Err(e) => Err(Box::new(e)),
 		  Ok(j) => Ok(j),

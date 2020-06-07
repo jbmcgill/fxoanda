@@ -1,7 +1,8 @@
 pub mod get_base_prices {
+    #[allow(unused_imports)]
     use chrono::prelude::*;
+    #[allow(unused_imports)]
     use fxoanda_definitions::*;
-    use fxoanda_serdes::*;
     use std::error::Error;
     use Client;
 
@@ -46,7 +47,7 @@ pub mod get_base_prices {
         #[serde(
             rename = "time",
             skip_serializing_if = "Option::is_none",
-            with = "serdates"
+            with = "fxoanda_serdes::serdates"
         )]
         pub time: Option<DateTime<Utc>>,
     }
@@ -129,7 +130,7 @@ pub mod get_base_prices {
                 .send();
             match res {
                 Err(e) => Err(Box::new(e)),
-                Ok(mut response) => match response.json::<GetBasePricesResponse>() {
+                Ok(response) => match response.json::<GetBasePricesResponse>() {
                     Err(e) => Err(Box::new(e)),
                     Ok(j) => Ok(j),
                 },
@@ -157,9 +158,10 @@ pub mod get_base_prices {
 }
 
 pub mod get_price_range {
+    #[allow(unused_imports)]
     use chrono::prelude::*;
+    #[allow(unused_imports)]
     use fxoanda_definitions::*;
-    use fxoanda_serdes::*;
     use std::error::Error;
     use Client;
 
@@ -207,14 +209,14 @@ pub mod get_price_range {
         #[serde(
             rename = "from",
             skip_serializing_if = "Option::is_none",
-            with = "serdates"
+            with = "fxoanda_serdes::serdates"
         )]
         pub from: Option<DateTime<Utc>>,
 
         #[serde(
             rename = "to",
             skip_serializing_if = "Option::is_none",
-            with = "serdates"
+            with = "fxoanda_serdes::serdates"
         )]
         pub to: Option<DateTime<Utc>>,
     }
@@ -326,7 +328,7 @@ pub mod get_price_range {
                 .send();
             match res {
                 Err(e) => Err(Box::new(e)),
-                Ok(mut response) => match response.json::<GetPriceRangeResponse>() {
+                Ok(response) => match response.json::<GetPriceRangeResponse>() {
                     Err(e) => Err(Box::new(e)),
                     Ok(j) => Ok(j),
                 },
