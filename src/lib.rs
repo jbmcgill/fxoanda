@@ -21,7 +21,7 @@
 //!
 //! let client = fxoanda::Client {
 //!                host: String::from(api_host),
-//!                reqwest: reqwest::Client::new(),
+//!                reqwest: reqwest::blocking::Client::new(),
 //!                authentication: String::from(api_key),
 //!              };
 //! match fxoanda::GetInstrumentCandlesRequest::new()
