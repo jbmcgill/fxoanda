@@ -18,7 +18,7 @@ top.
 ```toml
 # in your Cargo.toml
 reqwest = {version = "0.10.6", features = ["blocking","json"]}
-fxoanda = 0.1.3
+fxoanda = "0.1.3"
 
 ```
 
