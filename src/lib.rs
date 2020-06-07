@@ -49,7 +49,7 @@
 //!
 
 #![crate_type = "lib"]
-
+#[allow(unused_imports)]
 #[macro_use]
 extern crate serde_derive;
 //#[macro_use]

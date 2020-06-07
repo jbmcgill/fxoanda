@@ -1,7 +1,8 @@
 pub mod list_positions {
+    #[allow(unused_imports)]
     use chrono::prelude::*;
+    #[allow(unused_imports)]
     use fxoanda_definitions::*;
-    use fxoanda_serdes::*;
     use std::error::Error;
     use Client;
 
@@ -94,7 +95,7 @@ pub mod list_positions {
             self
         }
 
-        pub fn remote(self, client: &Client) -> Result<ListPositionsResponse, Box<Error>> {
+        pub fn remote(self, client: &Client) -> Result<ListPositionsResponse, Box<dyn Error>> {
             let uri = self
                 .uri
                 .clone()
@@ -110,7 +111,7 @@ pub mod list_positions {
                 Err(e) => Err(Box::new(e)),
                 Ok(mut response) => match response.json::<ListPositionsResponse>() {
                     Err(e) => Err(Box::new(e)),
-                    Ok(mut j) => Ok(j),
+                    Ok(j) => Ok(j),
                 },
             }
         }
@@ -137,13 +138,13 @@ pub mod list_positions {
         #[serde(rename = "lastTransactionID", skip_serializing_if = "Option::is_none")]
         pub last_transaction_id: Option<String>,
     }
-
 }
 
 pub mod list_open_positions {
+    #[allow(unused_imports)]
     use chrono::prelude::*;
+    #[allow(unused_imports)]
     use fxoanda_definitions::*;
-    use fxoanda_serdes::*;
     use std::error::Error;
     use Client;
 
@@ -235,7 +236,7 @@ pub mod list_open_positions {
             self
         }
 
-        pub fn remote(self, client: &Client) -> Result<ListOpenPositionsResponse, Box<Error>> {
+        pub fn remote(self, client: &Client) -> Result<ListOpenPositionsResponse, Box<dyn Error>> {
             let uri = self
                 .uri
                 .clone()
@@ -251,7 +252,7 @@ pub mod list_open_positions {
                 Err(e) => Err(Box::new(e)),
                 Ok(mut response) => match response.json::<ListOpenPositionsResponse>() {
                     Err(e) => Err(Box::new(e)),
-                    Ok(mut j) => Ok(j),
+                    Ok(j) => Ok(j),
                 },
             }
         }
@@ -278,13 +279,13 @@ pub mod list_open_positions {
         #[serde(rename = "lastTransactionID", skip_serializing_if = "Option::is_none")]
         pub last_transaction_id: Option<String>,
     }
-
 }
 
 pub mod get_position {
+    #[allow(unused_imports)]
     use chrono::prelude::*;
+    #[allow(unused_imports)]
     use fxoanda_definitions::*;
-    use fxoanda_serdes::*;
     use std::error::Error;
     use Client;
 
@@ -392,7 +393,7 @@ pub mod get_position {
             self
         }
 
-        pub fn remote(self, client: &Client) -> Result<GetPositionResponse, Box<Error>> {
+        pub fn remote(self, client: &Client) -> Result<GetPositionResponse, Box<dyn Error>> {
             let uri = self
                 .uri
                 .clone()
@@ -409,7 +410,7 @@ pub mod get_position {
                 Err(e) => Err(Box::new(e)),
                 Ok(mut response) => match response.json::<GetPositionResponse>() {
                     Err(e) => Err(Box::new(e)),
-                    Ok(mut j) => Ok(j),
+                    Ok(j) => Ok(j),
                 },
             }
         }
@@ -436,13 +437,13 @@ pub mod get_position {
         #[serde(rename = "lastTransactionID", skip_serializing_if = "Option::is_none")]
         pub last_transaction_id: Option<String>,
     }
-
 }
 
 pub mod close_position {
+    #[allow(unused_imports)]
     use chrono::prelude::*;
+    #[allow(unused_imports)]
     use fxoanda_definitions::*;
-    use fxoanda_serdes::*;
     use std::error::Error;
     use Client;
 
@@ -629,7 +630,7 @@ pub mod close_position {
             self
         }
 
-        pub fn remote(self, client: &Client) -> Result<ClosePositionResponse, Box<Error>> {
+        pub fn remote(self, client: &Client) -> Result<ClosePositionResponse, Box<dyn Error>> {
             let uri = self
                 .uri
                 .clone()
@@ -647,7 +648,7 @@ pub mod close_position {
                 Err(e) => Err(Box::new(e)),
                 Ok(mut response) => match response.json::<ClosePositionResponse>() {
                     Err(e) => Err(Box::new(e)),
-                    Ok(mut j) => Ok(j),
+                    Ok(j) => Ok(j),
                 },
             }
         }
@@ -731,13 +732,13 @@ pub mod close_position {
         #[serde(rename = "lastTransactionID", skip_serializing_if = "Option::is_none")]
         pub last_transaction_id: Option<String>,
     }
-
 }
 
 pub mod list_trades {
+    #[allow(unused_imports)]
     use chrono::prelude::*;
+    #[allow(unused_imports)]
     use fxoanda_definitions::*;
-    use fxoanda_serdes::*;
     use std::error::Error;
     use Client;
 
@@ -910,7 +911,7 @@ pub mod list_trades {
             self
         }
 
-        pub fn remote(self, client: &Client) -> Result<ListTradesResponse, Box<Error>> {
+        pub fn remote(self, client: &Client) -> Result<ListTradesResponse, Box<dyn Error>> {
             let uri = self
                 .uri
                 .clone()
@@ -926,7 +927,7 @@ pub mod list_trades {
                 Err(e) => Err(Box::new(e)),
                 Ok(mut response) => match response.json::<ListTradesResponse>() {
                     Err(e) => Err(Box::new(e)),
-                    Ok(mut j) => Ok(j),
+                    Ok(j) => Ok(j),
                 },
             }
         }
@@ -956,13 +957,13 @@ pub mod list_trades {
         #[serde(rename = "lastTransactionID", skip_serializing_if = "Option::is_none")]
         pub last_transaction_id: Option<String>,
     }
-
 }
 
 pub mod list_open_trades {
+    #[allow(unused_imports)]
     use chrono::prelude::*;
+    #[allow(unused_imports)]
     use fxoanda_definitions::*;
-    use fxoanda_serdes::*;
     use std::error::Error;
     use Client;
 
@@ -1068,7 +1069,7 @@ pub mod list_open_trades {
             self
         }
 
-        pub fn remote(self, client: &Client) -> Result<ListOpenTradesResponse, Box<Error>> {
+        pub fn remote(self, client: &Client) -> Result<ListOpenTradesResponse, Box<dyn Error>> {
             let uri = self
                 .uri
                 .clone()
@@ -1084,7 +1085,7 @@ pub mod list_open_trades {
                 Err(e) => Err(Box::new(e)),
                 Ok(mut response) => match response.json::<ListOpenTradesResponse>() {
                     Err(e) => Err(Box::new(e)),
-                    Ok(mut j) => Ok(j),
+                    Ok(j) => Ok(j),
                 },
             }
         }
@@ -1111,13 +1112,13 @@ pub mod list_open_trades {
         #[serde(rename = "lastTransactionID", skip_serializing_if = "Option::is_none")]
         pub last_transaction_id: Option<String>,
     }
-
 }
 
 pub mod get_trade {
+    #[allow(unused_imports)]
     use chrono::prelude::*;
+    #[allow(unused_imports)]
     use fxoanda_definitions::*;
-    use fxoanda_serdes::*;
     use std::error::Error;
     use Client;
 
@@ -1239,7 +1240,7 @@ pub mod get_trade {
             self
         }
 
-        pub fn remote(self, client: &Client) -> Result<GetTradeResponse, Box<Error>> {
+        pub fn remote(self, client: &Client) -> Result<GetTradeResponse, Box<dyn Error>> {
             let uri = self
                 .uri
                 .clone()
@@ -1256,7 +1257,7 @@ pub mod get_trade {
                 Err(e) => Err(Box::new(e)),
                 Ok(mut response) => match response.json::<GetTradeResponse>() {
                     Err(e) => Err(Box::new(e)),
-                    Ok(mut j) => Ok(j),
+                    Ok(j) => Ok(j),
                 },
             }
         }
@@ -1285,13 +1286,13 @@ pub mod get_trade {
         #[serde(rename = "lastTransactionID", skip_serializing_if = "Option::is_none")]
         pub last_transaction_id: Option<String>,
     }
-
 }
 
 pub mod close_trade {
+    #[allow(unused_imports)]
     use chrono::prelude::*;
+    #[allow(unused_imports)]
     use fxoanda_definitions::*;
-    use fxoanda_serdes::*;
     use std::error::Error;
     use Client;
 
@@ -1429,7 +1430,7 @@ pub mod close_trade {
             self
         }
 
-        pub fn remote(self, client: &Client) -> Result<CloseTradeResponse, Box<Error>> {
+        pub fn remote(self, client: &Client) -> Result<CloseTradeResponse, Box<dyn Error>> {
             let uri = self
                 .uri
                 .clone()
@@ -1447,7 +1448,7 @@ pub mod close_trade {
                 Err(e) => Err(Box::new(e)),
                 Ok(mut response) => match response.json::<CloseTradeResponse>() {
                     Err(e) => Err(Box::new(e)),
-                    Ok(mut j) => Ok(j),
+                    Ok(j) => Ok(j),
                 },
             }
         }
@@ -1503,13 +1504,13 @@ pub mod close_trade {
         #[serde(rename = "lastTransactionID", skip_serializing_if = "Option::is_none")]
         pub last_transaction_id: Option<String>,
     }
-
 }
 
 pub mod set_trade_client_extensions {
+    #[allow(unused_imports)]
     use chrono::prelude::*;
+    #[allow(unused_imports)]
     use fxoanda_definitions::*;
-    use fxoanda_serdes::*;
     use std::error::Error;
     use Client;
 
@@ -1652,7 +1653,7 @@ pub mod set_trade_client_extensions {
         pub fn remote(
             self,
             client: &Client,
-        ) -> Result<SetTradeClientExtensionsResponse, Box<Error>> {
+        ) -> Result<SetTradeClientExtensionsResponse, Box<dyn Error>> {
             let uri = self
                 .uri
                 .clone()
@@ -1670,7 +1671,7 @@ pub mod set_trade_client_extensions {
                 Err(e) => Err(Box::new(e)),
                 Ok(mut response) => match response.json::<SetTradeClientExtensionsResponse>() {
                     Err(e) => Err(Box::new(e)),
-                    Ok(mut j) => Ok(j),
+                    Ok(j) => Ok(j),
                 },
             }
         }
@@ -1709,13 +1710,13 @@ pub mod set_trade_client_extensions {
         #[serde(rename = "lastTransactionID", skip_serializing_if = "Option::is_none")]
         pub last_transaction_id: Option<String>,
     }
-
 }
 
 pub mod set_trade_dependent_orders {
+    #[allow(unused_imports)]
     use chrono::prelude::*;
+    #[allow(unused_imports)]
     use fxoanda_definitions::*;
-    use fxoanda_serdes::*;
     use std::error::Error;
     use Client;
 
@@ -1888,7 +1889,7 @@ pub mod set_trade_dependent_orders {
         pub fn remote(
             self,
             client: &Client,
-        ) -> Result<SetTradeDependentOrdersResponse, Box<Error>> {
+        ) -> Result<SetTradeDependentOrdersResponse, Box<dyn Error>> {
             let uri = self
                 .uri
                 .clone()
@@ -1906,7 +1907,7 @@ pub mod set_trade_dependent_orders {
                 Err(e) => Err(Box::new(e)),
                 Ok(mut response) => match response.json::<SetTradeDependentOrdersResponse>() {
                     Err(e) => Err(Box::new(e)),
-                    Ok(mut j) => Ok(j),
+                    Ok(j) => Ok(j),
                 },
             }
         }
@@ -2007,13 +2008,13 @@ pub mod set_trade_dependent_orders {
         #[serde(rename = "lastTransactionID", skip_serializing_if = "Option::is_none")]
         pub last_transaction_id: Option<String>,
     }
-
 }
 
 pub mod list_accounts {
+    #[allow(unused_imports)]
     use chrono::prelude::*;
+    #[allow(unused_imports)]
     use fxoanda_definitions::*;
-    use fxoanda_serdes::*;
     use std::error::Error;
     use Client;
 
@@ -2091,7 +2092,7 @@ pub mod list_accounts {
             self
         }
 
-        pub fn remote(self, client: &Client) -> Result<ListAccountsResponse, Box<Error>> {
+        pub fn remote(self, client: &Client) -> Result<ListAccountsResponse, Box<dyn Error>> {
             let uri = self.uri.clone();
             let url = format!("https://{host}{uri}", host = client.host, uri = uri);
             let res = client
@@ -2104,7 +2105,7 @@ pub mod list_accounts {
                 Err(e) => Err(Box::new(e)),
                 Ok(mut response) => match response.json::<ListAccountsResponse>() {
                     Err(e) => Err(Box::new(e)),
-                    Ok(mut j) => Ok(j),
+                    Ok(j) => Ok(j),
                 },
             }
         }
@@ -2128,13 +2129,13 @@ pub mod list_accounts {
         #[serde(rename = "accounts", skip_serializing_if = "Option::is_none")]
         pub accounts: Option<Vec<AccountProperties>>,
     }
-
 }
 
 pub mod get_account {
+    #[allow(unused_imports)]
     use chrono::prelude::*;
+    #[allow(unused_imports)]
     use fxoanda_definitions::*;
-    use fxoanda_serdes::*;
     use std::error::Error;
     use Client;
 
@@ -2242,7 +2243,7 @@ pub mod get_account {
             self
         }
 
-        pub fn remote(self, client: &Client) -> Result<GetAccountResponse, Box<Error>> {
+        pub fn remote(self, client: &Client) -> Result<GetAccountResponse, Box<dyn Error>> {
             let uri = self
                 .uri
                 .clone()
@@ -2258,7 +2259,7 @@ pub mod get_account {
                 Err(e) => Err(Box::new(e)),
                 Ok(mut response) => match response.json::<GetAccountResponse>() {
                     Err(e) => Err(Box::new(e)),
-                    Ok(mut j) => Ok(j),
+                    Ok(j) => Ok(j),
                 },
             }
         }
@@ -2286,13 +2287,13 @@ pub mod get_account {
         #[serde(rename = "lastTransactionID", skip_serializing_if = "Option::is_none")]
         pub last_transaction_id: Option<String>,
     }
-
 }
 
 pub mod get_account_summary {
+    #[allow(unused_imports)]
     use chrono::prelude::*;
+    #[allow(unused_imports)]
     use fxoanda_definitions::*;
-    use fxoanda_serdes::*;
     use std::error::Error;
     use Client;
 
@@ -2398,7 +2399,7 @@ pub mod get_account_summary {
             self
         }
 
-        pub fn remote(self, client: &Client) -> Result<GetAccountSummaryResponse, Box<Error>> {
+        pub fn remote(self, client: &Client) -> Result<GetAccountSummaryResponse, Box<dyn Error>> {
             let uri = self
                 .uri
                 .clone()
@@ -2414,7 +2415,7 @@ pub mod get_account_summary {
                 Err(e) => Err(Box::new(e)),
                 Ok(mut response) => match response.json::<GetAccountSummaryResponse>() {
                     Err(e) => Err(Box::new(e)),
-                    Ok(mut j) => Ok(j),
+                    Ok(j) => Ok(j),
                 },
             }
         }
@@ -2443,13 +2444,13 @@ pub mod get_account_summary {
         #[serde(rename = "lastTransactionID", skip_serializing_if = "Option::is_none")]
         pub last_transaction_id: Option<String>,
     }
-
 }
 
 pub mod get_account_instruments {
+    #[allow(unused_imports)]
     use chrono::prelude::*;
+    #[allow(unused_imports)]
     use fxoanda_definitions::*;
-    use fxoanda_serdes::*;
     use std::error::Error;
     use Client;
 
@@ -2554,7 +2555,10 @@ pub mod get_account_instruments {
             self
         }
 
-        pub fn remote(self, client: &Client) -> Result<GetAccountInstrumentsResponse, Box<Error>> {
+        pub fn remote(
+            self,
+            client: &Client,
+        ) -> Result<GetAccountInstrumentsResponse, Box<dyn Error>> {
             let uri = self
                 .uri
                 .clone()
@@ -2570,7 +2574,7 @@ pub mod get_account_instruments {
                 Err(e) => Err(Box::new(e)),
                 Ok(mut response) => match response.json::<GetAccountInstrumentsResponse>() {
                     Err(e) => Err(Box::new(e)),
-                    Ok(mut j) => Ok(j),
+                    Ok(j) => Ok(j),
                 },
             }
         }
@@ -2597,13 +2601,13 @@ pub mod get_account_instruments {
         #[serde(rename = "lastTransactionID", skip_serializing_if = "Option::is_none")]
         pub last_transaction_id: Option<String>,
     }
-
 }
 
 pub mod configure_account {
+    #[allow(unused_imports)]
     use chrono::prelude::*;
+    #[allow(unused_imports)]
     use fxoanda_definitions::*;
-    use fxoanda_serdes::*;
     use std::error::Error;
     use Client;
 
@@ -2646,7 +2650,7 @@ pub mod configure_account {
         #[serde(
             rename = "marginRate",
             skip_serializing_if = "Option::is_none",
-            with = "serfloats"
+            with = "fxoanda_serdes::serfloats"
         )]
         pub margin_rate: Option<f32>,
     }
@@ -2740,7 +2744,7 @@ pub mod configure_account {
             self
         }
 
-        pub fn remote(self, client: &Client) -> Result<ConfigureAccountResponse, Box<Error>> {
+        pub fn remote(self, client: &Client) -> Result<ConfigureAccountResponse, Box<dyn Error>> {
             let uri = self
                 .uri
                 .clone()
@@ -2757,7 +2761,7 @@ pub mod configure_account {
                 Err(e) => Err(Box::new(e)),
                 Ok(mut response) => match response.json::<ConfigureAccountResponse>() {
                     Err(e) => Err(Box::new(e)),
-                    Ok(mut j) => Ok(j),
+                    Ok(j) => Ok(j),
                 },
             }
         }
@@ -2788,13 +2792,13 @@ pub mod configure_account {
         #[serde(rename = "lastTransactionID", skip_serializing_if = "Option::is_none")]
         pub last_transaction_id: Option<String>,
     }
-
 }
 
 pub mod get_account_changes {
+    #[allow(unused_imports)]
     use chrono::prelude::*;
+    #[allow(unused_imports)]
     use fxoanda_definitions::*;
-    use fxoanda_serdes::*;
     use std::error::Error;
     use Client;
 
@@ -2915,7 +2919,7 @@ pub mod get_account_changes {
             self
         }
 
-        pub fn remote(self, client: &Client) -> Result<GetAccountChangesResponse, Box<Error>> {
+        pub fn remote(self, client: &Client) -> Result<GetAccountChangesResponse, Box<dyn Error>> {
             let uri = self
                 .uri
                 .clone()
@@ -2931,7 +2935,7 @@ pub mod get_account_changes {
                 Err(e) => Err(Box::new(e)),
                 Ok(mut response) => match response.json::<GetAccountChangesResponse>() {
                     Err(e) => Err(Box::new(e)),
-                    Ok(mut j) => Ok(j),
+                    Ok(j) => Ok(j),
                 },
             }
         }
@@ -2968,13 +2972,13 @@ pub mod get_account_changes {
         #[serde(rename = "lastTransactionID", skip_serializing_if = "Option::is_none")]
         pub last_transaction_id: Option<String>,
     }
-
 }
 
 pub mod list_transactions {
+    #[allow(unused_imports)]
     use chrono::prelude::*;
+    #[allow(unused_imports)]
     use fxoanda_definitions::*;
-    use fxoanda_serdes::*;
     use std::error::Error;
     use Client;
 
@@ -3022,14 +3026,14 @@ pub mod list_transactions {
         #[serde(
             rename = "from",
             skip_serializing_if = "Option::is_none",
-            with = "serdates"
+            with = "fxoanda_serdes::serdates"
         )]
         pub from: Option<DateTime<Utc>>,
 
         #[serde(
             rename = "to",
             skip_serializing_if = "Option::is_none",
-            with = "serdates"
+            with = "fxoanda_serdes::serdates"
         )]
         pub to: Option<DateTime<Utc>>,
 
@@ -3152,7 +3156,7 @@ pub mod list_transactions {
             self
         }
 
-        pub fn remote(self, client: &Client) -> Result<ListTransactionsResponse, Box<Error>> {
+        pub fn remote(self, client: &Client) -> Result<ListTransactionsResponse, Box<dyn Error>> {
             let uri = self
                 .uri
                 .clone()
@@ -3168,7 +3172,7 @@ pub mod list_transactions {
                 Err(e) => Err(Box::new(e)),
                 Ok(mut response) => match response.json::<ListTransactionsResponse>() {
                     Err(e) => Err(Box::new(e)),
-                    Ok(mut j) => Ok(j),
+                    Ok(j) => Ok(j),
                 },
             }
         }
@@ -3197,7 +3201,7 @@ pub mod list_transactions {
         #[serde(
             rename = "from",
             skip_serializing_if = "Option::is_none",
-            with = "serdates"
+            with = "fxoanda_serdes::serdates"
         )]
         pub from: Option<DateTime<Utc>>,
         /// The ending time provided in the request.
@@ -3210,7 +3214,7 @@ pub mod list_transactions {
         #[serde(
             rename = "to",
             skip_serializing_if = "Option::is_none",
-            with = "serdates"
+            with = "fxoanda_serdes::serdates"
         )]
         pub to: Option<DateTime<Utc>>,
         /// The pageSize provided in the request
@@ -3231,13 +3235,13 @@ pub mod list_transactions {
         #[serde(rename = "lastTransactionID", skip_serializing_if = "Option::is_none")]
         pub last_transaction_id: Option<String>,
     }
-
 }
 
 pub mod get_transaction {
+    #[allow(unused_imports)]
     use chrono::prelude::*;
+    #[allow(unused_imports)]
     use fxoanda_definitions::*;
-    use fxoanda_serdes::*;
     use std::error::Error;
     use Client;
 
@@ -3358,7 +3362,7 @@ pub mod get_transaction {
             self
         }
 
-        pub fn remote(self, client: &Client) -> Result<GetTransactionResponse, Box<Error>> {
+        pub fn remote(self, client: &Client) -> Result<GetTransactionResponse, Box<dyn Error>> {
             let uri = self
                 .uri
                 .clone()
@@ -3375,7 +3379,7 @@ pub mod get_transaction {
                 Err(e) => Err(Box::new(e)),
                 Ok(mut response) => match response.json::<GetTransactionResponse>() {
                     Err(e) => Err(Box::new(e)),
-                    Ok(mut j) => Ok(j),
+                    Ok(j) => Ok(j),
                 },
             }
         }
@@ -3403,13 +3407,13 @@ pub mod get_transaction {
         #[serde(rename = "lastTransactionID", skip_serializing_if = "Option::is_none")]
         pub last_transaction_id: Option<String>,
     }
-
 }
 
 pub mod get_transaction_range {
+    #[allow(unused_imports)]
     use chrono::prelude::*;
+    #[allow(unused_imports)]
     use fxoanda_definitions::*;
-    use fxoanda_serdes::*;
     use std::error::Error;
     use Client;
 
@@ -3555,7 +3559,10 @@ pub mod get_transaction_range {
             self
         }
 
-        pub fn remote(self, client: &Client) -> Result<GetTransactionRangeResponse, Box<Error>> {
+        pub fn remote(
+            self,
+            client: &Client,
+        ) -> Result<GetTransactionRangeResponse, Box<dyn Error>> {
             let uri = self
                 .uri
                 .clone()
@@ -3571,7 +3578,7 @@ pub mod get_transaction_range {
                 Err(e) => Err(Box::new(e)),
                 Ok(mut response) => match response.json::<GetTransactionRangeResponse>() {
                     Err(e) => Err(Box::new(e)),
-                    Ok(mut j) => Ok(j),
+                    Ok(j) => Ok(j),
                 },
             }
         }
@@ -3598,13 +3605,13 @@ pub mod get_transaction_range {
         #[serde(rename = "lastTransactionID", skip_serializing_if = "Option::is_none")]
         pub last_transaction_id: Option<String>,
     }
-
 }
 
 pub mod get_transactions_since_id {
+    #[allow(unused_imports)]
     use chrono::prelude::*;
+    #[allow(unused_imports)]
     use fxoanda_definitions::*;
-    use fxoanda_serdes::*;
     use std::error::Error;
     use Client;
 
@@ -3724,7 +3731,10 @@ pub mod get_transactions_since_id {
             self
         }
 
-        pub fn remote(self, client: &Client) -> Result<GetTransactionsSinceIdResponse, Box<Error>> {
+        pub fn remote(
+            self,
+            client: &Client,
+        ) -> Result<GetTransactionsSinceIdResponse, Box<dyn Error>> {
             let uri = self
                 .uri
                 .clone()
@@ -3740,7 +3750,7 @@ pub mod get_transactions_since_id {
                 Err(e) => Err(Box::new(e)),
                 Ok(mut response) => match response.json::<GetTransactionsSinceIdResponse>() {
                     Err(e) => Err(Box::new(e)),
-                    Ok(mut j) => Ok(j),
+                    Ok(j) => Ok(j),
                 },
             }
         }
@@ -3767,13 +3777,13 @@ pub mod get_transactions_since_id {
         #[serde(rename = "lastTransactionID", skip_serializing_if = "Option::is_none")]
         pub last_transaction_id: Option<String>,
     }
-
 }
 
 pub mod stream_transactions {
+    #[allow(unused_imports)]
     use chrono::prelude::*;
+    #[allow(unused_imports)]
     use fxoanda_definitions::*;
-    use fxoanda_serdes::*;
     use std::error::Error;
     use Client;
 
@@ -3865,7 +3875,7 @@ pub mod stream_transactions {
             self
         }
 
-        pub fn remote(self, client: &Client) -> Result<StreamTransactionsResponse, Box<Error>> {
+        pub fn remote(self, client: &Client) -> Result<StreamTransactionsResponse, Box<dyn Error>> {
             let uri = self
                 .uri
                 .clone()
@@ -3881,7 +3891,7 @@ pub mod stream_transactions {
                 Err(e) => Err(Box::new(e)),
                 Ok(mut response) => match response.json::<StreamTransactionsResponse>() {
                     Err(e) => Err(Box::new(e)),
-                    Ok(mut j) => Ok(j),
+                    Ok(j) => Ok(j),
                 },
             }
         }
@@ -3909,13 +3919,13 @@ pub mod stream_transactions {
         #[serde(rename = "heartbeat", skip_serializing_if = "Option::is_none")]
         pub heartbeat: Option<TransactionHeartbeat>,
     }
-
 }
 
 pub mod get_prices {
+    #[allow(unused_imports)]
     use chrono::prelude::*;
+    #[allow(unused_imports)]
     use fxoanda_definitions::*;
-    use fxoanda_serdes::*;
     use std::error::Error;
     use Client;
 
@@ -3966,7 +3976,7 @@ pub mod get_prices {
         #[serde(
             rename = "since",
             skip_serializing_if = "Option::is_none",
-            with = "serdates"
+            with = "fxoanda_serdes::serdates"
         )]
         pub since: Option<DateTime<Utc>>,
 
@@ -4094,7 +4104,7 @@ pub mod get_prices {
             self
         }
 
-        pub fn remote(self, client: &Client) -> Result<GetPricesResponse, Box<Error>> {
+        pub fn remote(self, client: &Client) -> Result<GetPricesResponse, Box<dyn Error>> {
             let uri = self
                 .uri
                 .clone()
@@ -4110,7 +4120,7 @@ pub mod get_prices {
                 Err(e) => Err(Box::new(e)),
                 Ok(mut response) => match response.json::<GetPricesResponse>() {
                     Err(e) => Err(Box::new(e)),
-                    Ok(mut j) => Ok(j),
+                    Ok(j) => Ok(j),
                 },
             }
         }
@@ -4148,17 +4158,17 @@ pub mod get_prices {
         #[serde(
             rename = "time",
             skip_serializing_if = "Option::is_none",
-            with = "serdates"
+            with = "fxoanda_serdes::serdates"
         )]
         pub time: Option<DateTime<Utc>>,
     }
-
 }
 
 pub mod stream_pricing {
+    #[allow(unused_imports)]
     use chrono::prelude::*;
+    #[allow(unused_imports)]
     use fxoanda_definitions::*;
-    use fxoanda_serdes::*;
     use std::error::Error;
     use Client;
 
@@ -4301,7 +4311,7 @@ pub mod stream_pricing {
             self
         }
 
-        pub fn remote(self, client: &Client) -> Result<StreamPricingResponse, Box<Error>> {
+        pub fn remote(self, client: &Client) -> Result<StreamPricingResponse, Box<dyn Error>> {
             let uri = self
                 .uri
                 .clone()
@@ -4317,7 +4327,7 @@ pub mod stream_pricing {
                 Err(e) => Err(Box::new(e)),
                 Ok(mut response) => match response.json::<StreamPricingResponse>() {
                     Err(e) => Err(Box::new(e)),
-                    Ok(mut j) => Ok(j),
+                    Ok(j) => Ok(j),
                 },
             }
         }
@@ -4347,13 +4357,13 @@ pub mod stream_pricing {
         #[serde(rename = "heartbeat", skip_serializing_if = "Option::is_none")]
         pub heartbeat: Option<PricingHeartbeat>,
     }
-
 }
 
 pub mod get_account_instrument_candles {
+    #[allow(unused_imports)]
     use chrono::prelude::*;
+    #[allow(unused_imports)]
     use fxoanda_definitions::*;
-    use fxoanda_serdes::*;
     use std::error::Error;
     use Client;
 
@@ -4410,14 +4420,14 @@ pub mod get_account_instrument_candles {
         #[serde(
             rename = "from",
             skip_serializing_if = "Option::is_none",
-            with = "serdates"
+            with = "fxoanda_serdes::serdates"
         )]
         pub from: Option<DateTime<Utc>>,
 
         #[serde(
             rename = "to",
             skip_serializing_if = "Option::is_none",
-            with = "serdates"
+            with = "fxoanda_serdes::serdates"
         )]
         pub to: Option<DateTime<Utc>>,
 
@@ -4439,7 +4449,7 @@ pub mod get_account_instrument_candles {
         #[serde(
             rename = "units",
             skip_serializing_if = "Option::is_none",
-            with = "serfloats"
+            with = "fxoanda_serdes::serfloats"
         )]
         pub units: Option<f32>,
     }
@@ -4638,7 +4648,7 @@ pub mod get_account_instrument_candles {
         pub fn remote(
             self,
             client: &Client,
-        ) -> Result<GetAccountInstrumentCandlesResponse, Box<Error>> {
+        ) -> Result<GetAccountInstrumentCandlesResponse, Box<dyn Error>> {
             let uri = self
                 .uri
                 .clone()
@@ -4654,7 +4664,7 @@ pub mod get_account_instrument_candles {
                 Err(e) => Err(Box::new(e)),
                 Ok(mut response) => match response.json::<GetAccountInstrumentCandlesResponse>() {
                     Err(e) => Err(Box::new(e)),
-                    Ok(mut j) => Ok(j),
+                    Ok(j) => Ok(j),
                 },
             }
         }
@@ -4685,13 +4695,13 @@ pub mod get_account_instrument_candles {
         #[serde(rename = "candles", skip_serializing_if = "Option::is_none")]
         pub candles: Option<Vec<Candlestick>>,
     }
-
 }
 
 pub mod create_market_order {
+    #[allow(unused_imports)]
     use chrono::prelude::*;
+    #[allow(unused_imports)]
     use fxoanda_definitions::*;
-    use fxoanda_serdes::*;
     use std::error::Error;
     use Client;
 
@@ -4807,7 +4817,7 @@ pub mod create_market_order {
             self
         }
 
-        pub fn remote(self, client: &Client) -> Result<CreateMarketOrderResponse, Box<Error>> {
+        pub fn remote(self, client: &Client) -> Result<CreateMarketOrderResponse, Box<dyn Error>> {
             let uri = self
                 .uri
                 .clone()
@@ -4824,7 +4834,7 @@ pub mod create_market_order {
                 Err(e) => Err(Box::new(e)),
                 Ok(mut response) => match response.json::<CreateMarketOrderResponse>() {
                     Err(e) => Err(Box::new(e)),
-                    Ok(mut j) => Ok(j),
+                    Ok(j) => Ok(j),
                 },
             }
         }
@@ -4893,13 +4903,13 @@ pub mod create_market_order {
         #[serde(rename = "lastTransactionID", skip_serializing_if = "Option::is_none")]
         pub last_transaction_id: Option<String>,
     }
-
 }
 
 pub mod create_limit_order {
+    #[allow(unused_imports)]
     use chrono::prelude::*;
+    #[allow(unused_imports)]
     use fxoanda_definitions::*;
-    use fxoanda_serdes::*;
     use std::error::Error;
     use Client;
 
@@ -5015,7 +5025,7 @@ pub mod create_limit_order {
             self
         }
 
-        pub fn remote(self, client: &Client) -> Result<CreateLimitOrderResponse, Box<Error>> {
+        pub fn remote(self, client: &Client) -> Result<CreateLimitOrderResponse, Box<dyn Error>> {
             let uri = self
                 .uri
                 .clone()
@@ -5032,7 +5042,7 @@ pub mod create_limit_order {
                 Err(e) => Err(Box::new(e)),
                 Ok(mut response) => match response.json::<CreateLimitOrderResponse>() {
                     Err(e) => Err(Box::new(e)),
-                    Ok(mut j) => Ok(j),
+                    Ok(j) => Ok(j),
                 },
             }
         }
@@ -5101,13 +5111,13 @@ pub mod create_limit_order {
         #[serde(rename = "lastTransactionID", skip_serializing_if = "Option::is_none")]
         pub last_transaction_id: Option<String>,
     }
-
 }
 
 pub mod create_stop_order {
+    #[allow(unused_imports)]
     use chrono::prelude::*;
+    #[allow(unused_imports)]
     use fxoanda_definitions::*;
-    use fxoanda_serdes::*;
     use std::error::Error;
     use Client;
 
@@ -5223,7 +5233,7 @@ pub mod create_stop_order {
             self
         }
 
-        pub fn remote(self, client: &Client) -> Result<CreateStopOrderResponse, Box<Error>> {
+        pub fn remote(self, client: &Client) -> Result<CreateStopOrderResponse, Box<dyn Error>> {
             let uri = self
                 .uri
                 .clone()
@@ -5240,7 +5250,7 @@ pub mod create_stop_order {
                 Err(e) => Err(Box::new(e)),
                 Ok(mut response) => match response.json::<CreateStopOrderResponse>() {
                     Err(e) => Err(Box::new(e)),
-                    Ok(mut j) => Ok(j),
+                    Ok(j) => Ok(j),
                 },
             }
         }
@@ -5309,13 +5319,13 @@ pub mod create_stop_order {
         #[serde(rename = "lastTransactionID", skip_serializing_if = "Option::is_none")]
         pub last_transaction_id: Option<String>,
     }
-
 }
 
 pub mod list_orders {
+    #[allow(unused_imports)]
     use chrono::prelude::*;
+    #[allow(unused_imports)]
     use fxoanda_definitions::*;
-    use fxoanda_serdes::*;
     use std::error::Error;
     use Client;
 
@@ -5488,7 +5498,7 @@ pub mod list_orders {
             self
         }
 
-        pub fn remote(self, client: &Client) -> Result<ListOrdersResponse, Box<Error>> {
+        pub fn remote(self, client: &Client) -> Result<ListOrdersResponse, Box<dyn Error>> {
             let uri = self
                 .uri
                 .clone()
@@ -5504,7 +5514,7 @@ pub mod list_orders {
                 Err(e) => Err(Box::new(e)),
                 Ok(mut response) => match response.json::<ListOrdersResponse>() {
                     Err(e) => Err(Box::new(e)),
-                    Ok(mut j) => Ok(j),
+                    Ok(j) => Ok(j),
                 },
             }
         }
@@ -5534,13 +5544,13 @@ pub mod list_orders {
         #[serde(rename = "lastTransactionID", skip_serializing_if = "Option::is_none")]
         pub last_transaction_id: Option<String>,
     }
-
 }
 
 pub mod list_pending_orders {
+    #[allow(unused_imports)]
     use chrono::prelude::*;
+    #[allow(unused_imports)]
     use fxoanda_definitions::*;
-    use fxoanda_serdes::*;
     use std::error::Error;
     use Client;
 
@@ -5646,7 +5656,7 @@ pub mod list_pending_orders {
             self
         }
 
-        pub fn remote(self, client: &Client) -> Result<ListPendingOrdersResponse, Box<Error>> {
+        pub fn remote(self, client: &Client) -> Result<ListPendingOrdersResponse, Box<dyn Error>> {
             let uri = self
                 .uri
                 .clone()
@@ -5662,7 +5672,7 @@ pub mod list_pending_orders {
                 Err(e) => Err(Box::new(e)),
                 Ok(mut response) => match response.json::<ListPendingOrdersResponse>() {
                     Err(e) => Err(Box::new(e)),
-                    Ok(mut j) => Ok(j),
+                    Ok(j) => Ok(j),
                 },
             }
         }
@@ -5689,13 +5699,13 @@ pub mod list_pending_orders {
         #[serde(rename = "lastTransactionID", skip_serializing_if = "Option::is_none")]
         pub last_transaction_id: Option<String>,
     }
-
 }
 
 pub mod get_order {
+    #[allow(unused_imports)]
     use chrono::prelude::*;
+    #[allow(unused_imports)]
     use fxoanda_definitions::*;
-    use fxoanda_serdes::*;
     use std::error::Error;
     use Client;
 
@@ -5817,7 +5827,7 @@ pub mod get_order {
             self
         }
 
-        pub fn remote(self, client: &Client) -> Result<GetOrderResponse, Box<Error>> {
+        pub fn remote(self, client: &Client) -> Result<GetOrderResponse, Box<dyn Error>> {
             let uri = self
                 .uri
                 .clone()
@@ -5834,7 +5844,7 @@ pub mod get_order {
                 Err(e) => Err(Box::new(e)),
                 Ok(mut response) => match response.json::<GetOrderResponse>() {
                     Err(e) => Err(Box::new(e)),
-                    Ok(mut j) => Ok(j),
+                    Ok(j) => Ok(j),
                 },
             }
         }
@@ -5865,13 +5875,13 @@ pub mod get_order {
         #[serde(rename = "lastTransactionID", skip_serializing_if = "Option::is_none")]
         pub last_transaction_id: Option<String>,
     }
-
 }
 
 pub mod replace_order {
+    #[allow(unused_imports)]
     use chrono::prelude::*;
+    #[allow(unused_imports)]
     use fxoanda_definitions::*;
-    use fxoanda_serdes::*;
     use std::error::Error;
     use Client;
 
@@ -6018,7 +6028,7 @@ pub mod replace_order {
             self
         }
 
-        pub fn remote(self, client: &Client) -> Result<ReplaceOrderResponse, Box<Error>> {
+        pub fn remote(self, client: &Client) -> Result<ReplaceOrderResponse, Box<dyn Error>> {
             let uri = self
                 .uri
                 .clone()
@@ -6036,7 +6046,7 @@ pub mod replace_order {
                 Err(e) => Err(Box::new(e)),
                 Ok(mut response) => match response.json::<ReplaceOrderResponse>() {
                     Err(e) => Err(Box::new(e)),
-                    Ok(mut j) => Ok(j),
+                    Ok(j) => Ok(j),
                 },
             }
         }
@@ -6112,13 +6122,13 @@ pub mod replace_order {
         #[serde(rename = "lastTransactionID", skip_serializing_if = "Option::is_none")]
         pub last_transaction_id: Option<String>,
     }
-
 }
 
 pub mod cancel_order {
+    #[allow(unused_imports)]
     use chrono::prelude::*;
+    #[allow(unused_imports)]
     use fxoanda_definitions::*;
-    use fxoanda_serdes::*;
     use std::error::Error;
     use Client;
 
@@ -6252,7 +6262,7 @@ pub mod cancel_order {
             self
         }
 
-        pub fn remote(self, client: &Client) -> Result<CancelOrderResponse, Box<Error>> {
+        pub fn remote(self, client: &Client) -> Result<CancelOrderResponse, Box<dyn Error>> {
             let uri = self
                 .uri
                 .clone()
@@ -6270,7 +6280,7 @@ pub mod cancel_order {
                 Err(e) => Err(Box::new(e)),
                 Ok(mut response) => match response.json::<CancelOrderResponse>() {
                     Err(e) => Err(Box::new(e)),
-                    Ok(mut j) => Ok(j),
+                    Ok(j) => Ok(j),
                 },
             }
         }
@@ -6308,13 +6318,13 @@ pub mod cancel_order {
         #[serde(rename = "lastTransactionID", skip_serializing_if = "Option::is_none")]
         pub last_transaction_id: Option<String>,
     }
-
 }
 
 pub mod set_order_client_extensions {
+    #[allow(unused_imports)]
     use chrono::prelude::*;
+    #[allow(unused_imports)]
     use fxoanda_definitions::*;
-    use fxoanda_serdes::*;
     use std::error::Error;
     use Client;
 
@@ -6475,7 +6485,7 @@ pub mod set_order_client_extensions {
         pub fn remote(
             self,
             client: &Client,
-        ) -> Result<SetOrderClientExtensionsResponse, Box<Error>> {
+        ) -> Result<SetOrderClientExtensionsResponse, Box<dyn Error>> {
             let uri = self
                 .uri
                 .clone()
@@ -6493,7 +6503,7 @@ pub mod set_order_client_extensions {
                 Err(e) => Err(Box::new(e)),
                 Ok(mut response) => match response.json::<SetOrderClientExtensionsResponse>() {
                     Err(e) => Err(Box::new(e)),
-                    Ok(mut j) => Ok(j),
+                    Ok(j) => Ok(j),
                 },
             }
         }
@@ -6532,7 +6542,6 @@ pub mod set_order_client_extensions {
         )]
         pub related_transaction_i_ds: Option<Vec<String>>,
     }
-
 }
 pub use cancel_order::*;
 pub use close_position::*;

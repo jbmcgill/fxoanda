@@ -18,7 +18,7 @@ macro_rules! client_requests {
          use $request;
          use $response;
          impl Client {
-           pub fn $func( &self, x: $request ) -> Result<$response, Box<Error>> {
+           pub fn $func( &self, x: $request ) -> Result<$response, Box<dyn Error>> {
              x.remote(&self)
            }
          }

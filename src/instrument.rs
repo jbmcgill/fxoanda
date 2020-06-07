@@ -264,7 +264,10 @@ pub mod get_instrument_candles {
             self
         }
 
-        pub fn remote(self, client: &Client) -> Result<GetInstrumentCandlesResponse, Box<Error>> {
+        pub fn remote(
+            self,
+            client: &Client,
+        ) -> Result<GetInstrumentCandlesResponse, Box<dyn Error>> {
             let uri = self
                 .uri
                 .clone()
@@ -280,7 +283,7 @@ pub mod get_instrument_candles {
                 Err(e) => Err(Box::new(e)),
                 Ok(mut response) => match response.json::<GetInstrumentCandlesResponse>() {
                     Err(e) => Err(Box::new(e)),
-                    Ok(mut j) => Ok(j),
+                    Ok(j) => Ok(j),
                 },
             }
         }
@@ -311,7 +314,6 @@ pub mod get_instrument_candles {
         #[serde(rename = "candles", skip_serializing_if = "Option::is_none")]
         pub candles: Option<Vec<Candlestick>>,
     }
-
 }
 
 pub mod get_instrument_price {
@@ -446,7 +448,7 @@ pub mod get_instrument_price {
             self
         }
 
-        pub fn remote(self, client: &Client) -> Result<GetInstrumentPriceResponse, Box<Error>> {
+        pub fn remote(self, client: &Client) -> Result<GetInstrumentPriceResponse, Box<dyn Error>> {
             let uri = self
                 .uri
                 .clone()
@@ -462,7 +464,7 @@ pub mod get_instrument_price {
                 Err(e) => Err(Box::new(e)),
                 Ok(mut response) => match response.json::<GetInstrumentPriceResponse>() {
                     Err(e) => Err(Box::new(e)),
-                    Ok(mut j) => Ok(j),
+                    Ok(j) => Ok(j),
                 },
             }
         }
@@ -485,7 +487,6 @@ pub mod get_instrument_price {
         #[serde(rename = "price", skip_serializing_if = "Option::is_none")]
         pub price: Option<Price>,
     }
-
 }
 
 pub mod get_instrument_price_range {
@@ -647,7 +648,7 @@ pub mod get_instrument_price_range {
         pub fn remote(
             self,
             client: &Client,
-        ) -> Result<GetInstrumentPriceRangeResponse, Box<Error>> {
+        ) -> Result<GetInstrumentPriceRangeResponse, Box<dyn Error>> {
             let uri = self
                 .uri
                 .clone()
@@ -663,7 +664,7 @@ pub mod get_instrument_price_range {
                 Err(e) => Err(Box::new(e)),
                 Ok(mut response) => match response.json::<GetInstrumentPriceRangeResponse>() {
                     Err(e) => Err(Box::new(e)),
-                    Ok(mut j) => Ok(j),
+                    Ok(j) => Ok(j),
                 },
             }
         }
@@ -689,7 +690,6 @@ pub mod get_instrument_price_range {
         #[serde(rename = "prices", skip_serializing_if = "Option::is_none")]
         pub prices: Option<Vec<Price>>,
     }
-
 }
 
 pub mod get_order_book {
@@ -823,7 +823,7 @@ pub mod get_order_book {
             self
         }
 
-        pub fn remote(self, client: &Client) -> Result<GetOrderBookResponse, Box<Error>> {
+        pub fn remote(self, client: &Client) -> Result<GetOrderBookResponse, Box<dyn Error>> {
             let uri = self
                 .uri
                 .clone()
@@ -839,7 +839,7 @@ pub mod get_order_book {
                 Err(e) => Err(Box::new(e)),
                 Ok(mut response) => match response.json::<GetOrderBookResponse>() {
                     Err(e) => Err(Box::new(e)),
-                    Ok(mut j) => Ok(j),
+                    Ok(j) => Ok(j),
                 },
             }
         }
@@ -868,7 +868,6 @@ pub mod get_order_book {
         #[serde(rename = "orderBook", skip_serializing_if = "Option::is_none")]
         pub order_book: Option<OrderBook>,
     }
-
 }
 
 pub mod get_position_book {
@@ -1002,7 +1001,7 @@ pub mod get_position_book {
             self
         }
 
-        pub fn remote(self, client: &Client) -> Result<GetPositionBookResponse, Box<Error>> {
+        pub fn remote(self, client: &Client) -> Result<GetPositionBookResponse, Box<dyn Error>> {
             let uri = self
                 .uri
                 .clone()
@@ -1018,7 +1017,7 @@ pub mod get_position_book {
                 Err(e) => Err(Box::new(e)),
                 Ok(mut response) => match response.json::<GetPositionBookResponse>() {
                     Err(e) => Err(Box::new(e)),
-                    Ok(mut j) => Ok(j),
+                    Ok(j) => Ok(j),
                 },
             }
         }
@@ -1047,7 +1046,6 @@ pub mod get_position_book {
         #[serde(rename = "positionBook", skip_serializing_if = "Option::is_none")]
         pub position_book: Option<PositionBook>,
     }
-
 }
 pub use get_instrument_candles::*;
 pub use get_instrument_price::*;

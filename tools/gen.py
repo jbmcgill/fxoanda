@@ -22,7 +22,7 @@ def camel(s):
  return ucfirst(s).title().replace("_","")
 
 def get_schema():
-  with open("./v20.json","r") as f:
+  with open("./tools/v20.json","r") as f:
     schema = json.load(f)
   schema['paths']['/instruments/{instrument}/positionBook']['get']['operationId'] = 'getPositionBook'
   schema['paths']['/instruments/{instrument}/orderBook']['get']['operationId'] = 'getOrderBook'

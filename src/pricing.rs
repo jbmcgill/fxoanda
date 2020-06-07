@@ -118,7 +118,7 @@ pub mod get_base_prices {
             self
         }
 
-        pub fn remote(self, client: &Client) -> Result<GetBasePricesResponse, Box<Error>> {
+        pub fn remote(self, client: &Client) -> Result<GetBasePricesResponse, Box<dyn Error>> {
             let uri = self.uri.clone();
             let url = format!("https://{host}{uri}", host = client.host, uri = uri);
             let res = client
@@ -131,7 +131,7 @@ pub mod get_base_prices {
                 Err(e) => Err(Box::new(e)),
                 Ok(mut response) => match response.json::<GetBasePricesResponse>() {
                     Err(e) => Err(Box::new(e)),
-                    Ok(mut j) => Ok(j),
+                    Ok(j) => Ok(j),
                 },
             }
         }
@@ -154,7 +154,6 @@ pub mod get_base_prices {
         #[serde(rename = "prices", skip_serializing_if = "Option::is_none")]
         pub prices: Option<Vec<Price>>,
     }
-
 }
 
 pub mod get_price_range {
@@ -313,7 +312,7 @@ pub mod get_price_range {
             self
         }
 
-        pub fn remote(self, client: &Client) -> Result<GetPriceRangeResponse, Box<Error>> {
+        pub fn remote(self, client: &Client) -> Result<GetPriceRangeResponse, Box<dyn Error>> {
             let uri = self
                 .uri
                 .clone()
@@ -329,7 +328,7 @@ pub mod get_price_range {
                 Err(e) => Err(Box::new(e)),
                 Ok(mut response) => match response.json::<GetPriceRangeResponse>() {
                     Err(e) => Err(Box::new(e)),
-                    Ok(mut j) => Ok(j),
+                    Ok(j) => Ok(j),
                 },
             }
         }
@@ -355,7 +354,6 @@ pub mod get_price_range {
         #[serde(rename = "prices", skip_serializing_if = "Option::is_none")]
         pub prices: Option<Vec<Price>>,
     }
-
 }
 pub use get_base_prices::*;
 pub use get_price_range::*;

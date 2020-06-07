@@ -1,16 +1,17 @@
 
 pub mod {{ snake }}{
+	#[allow(unused_imports)]
 	use chrono::prelude::*;
 	use std::error::Error;
 	use Client;
+	#[allow(unused_imports)]
 	use fxoanda_definitions::*;
-	use fxoanda_serdes::*;
 
 	{% for key, name in [('header','Head'),('path','Path'),('body','Body'),('query','Query')] %}
 	#[derive(Debug,Serialize,Deserialize)]
 	struct Request{{ name }} { {% for o in params[key] %}
 
-	  #[serde(rename="{{ o['name'] }}", skip_serializing_if="Option::is_none" {% if o['type'] == 'f32' %}, with="serfloats" {% elif o['type'] == 'DateTime<Utc>' %}, with="serdates" {% endif %})]
+	  #[serde(rename="{{ o['name'] }}", skip_serializing_if="Option::is_none" {% if o['type'] == 'f32' %}, with="fxoanda_serdes::serfloats" {% elif o['type'] == 'DateTime<Utc>' %}, with="fxoanda_serdes::serdates" {% endif %})]
 	  pub {{ o['snake'] }} : Option<{{ o['type'] }}>,{% endfor %}
 	}
 	impl Request{{ name }} {
@@ -57,7 +58,7 @@ pub mod {{ snake }}{
 	  }
 	{% endfor %}
 
-		pub fn remote(self, client: &Client) -> Result<{{ name }}Response, Box<Error>> {
+		pub fn remote(self, client: &Client) -> Result<{{ name }}Response, Box<dyn Error>> {
 	    let uri = self.uri.clone(){% for o in params['path'] %}
 		      .replace("{{ "{" }}{{ o['name'] }}{{ "}" }}", &self.path.{{ o['snake'] }}.unwrap()){% endfor %};
 	    let url = format!("https://{host}{uri}", host=client.host, uri=uri);
@@ -70,7 +71,7 @@ pub mod {{ snake }}{
 	      Ok(mut response) => { 
 		match response.json::<{{ name }}Response>() {
 		  Err(e) => Err(Box::new(e)),
-		  Ok(mut j) => Ok(j),
+		  Ok(j) => Ok(j),
 		}
 	      }
 	    }
@@ -84,7 +85,7 @@ pub mod {{ snake }}{
 	{{ response['comment'] }}#[derive(Debug,Serialize,Deserialize)]
 	pub struct {{ name }}Response{{ response['code'] }}{{ section_name }} {
 	{% for o in response['params'][section_key] %}
-	  {{ o['comment'] }} #[serde(rename="{{ o['name'] }}", skip_serializing_if="Option::is_none" {% if o['type'] == 'f32' %}, with="serfloats" {% elif o['type'] == 'DateTime<Utc>' %}, with="serdates" {% endif %})]
+	  {{ o['comment'] }} #[serde(rename="{{ o['name'] }}", skip_serializing_if="Option::is_none" {% if o['type'] == 'f32' %}, with="fxoanda_serdes::serfloats" {% elif o['type'] == 'DateTime<Utc>' %}, with="fxoanda_serdes::serdates" {% endif %})]
 	  pub {{ o['snake'] }} : Option<{{ o['type'] }}>,{% endfor %}
 	}
 	{% endfor %}
