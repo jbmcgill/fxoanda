@@ -10,38 +10,40 @@ top.
 ## Installation
 
 ```rust
- cargo install fxoanda
+ cargo add fxoanda
 ```
 
 ## Example usage
 
 ```toml
 # in your Cargo.toml
-reqwest = {version = "0.10.6", features = ["blocking","json"]}
-fxoanda = "0.1.3"
-
+reqwest = {version = "0.12.2", features = ["json"]}
+tokio = { version = "1.37.0", features = ["macros", "time", "rt-multi-thread"] }
 ```
 
 ```rust
+use std::env;
 use fxoanda::*;
 
-let api_key = env::var("OANDA_KEY").expect("expected OANDA_KEY environment variable to be set");
-let api_host = env::var("OANDA_HOST").expect("expected OANDA_HOST environment variable to be set");
+#[tokio::main]
+async fn main() {
+    let api_key = env::var("OANDA_KEY").expect("expected OANDA_KEY environment variable to be set");
+    let api_host = env::var("OANDA_HOST").expect("expected OANDA_HOST environment variable to be set");
 
-let client = fxoanda::Client {
-               host: String::from(api_host),
-               reqwest: reqwest::blocking::Client::new(),
-               authentication: String::from(api_key),
-             };
-match fxoanda::GetInstrumentCandlesRequest::new()
+    let client = fxoanda::Client {
+        host: String::from(api_host),
+        reqwest: reqwest::Client::new(),
+        authentication: String::from(api_key),
+    };
+    match fxoanda::GetInstrumentCandlesRequest::new()
         .with_instrument("EUR_USD".to_string())
         .with_granularity(CandlestickGranularity::H4)
-        .remote(&client)
-   {
-       Ok(x) => println!("OK: {:#?}", x),
-       Err(e) => eprintln!("ERR: {:#?}", e),
-   };
-
+        .remote(&client).await
+    {
+        Ok(x) => println!("OK: {:#?}", x),
+        Err(e) => eprintln!("ERR: {:#?}", e),
+    };
+}
 ```
 
 ## Warning
@@ -55,4 +57,3 @@ can wipe out your account in an instant.
 Use this project at your own risk. The maintainers of this project make no
 claims as to this product being fit for purpose. In fact, the maintainers of this
 project are telling you that you shouldn't use this project.
-

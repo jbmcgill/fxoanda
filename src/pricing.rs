@@ -4,17 +4,14 @@ pub mod get_base_prices {
     #[allow(unused_imports)]
     use fxoanda_definitions::*;
     use std::error::Error;
-    use Client;
+    use crate::Client;
 
     #[derive(Debug, Serialize, Deserialize)]
     struct RequestHead {
         #[serde(rename = "Authorization", skip_serializing_if = "Option::is_none")]
         pub authorization: Option<String>,
 
-        #[serde(
-            rename = "AcceptDatetimeFormat",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "AcceptDatetimeFormat", skip_serializing_if = "Option::is_none")]
         pub accept_datetime_format: Option<String>,
     }
     impl RequestHead {
@@ -119,21 +116,24 @@ pub mod get_base_prices {
             self
         }
 
-        pub fn remote(self, client: &Client) -> Result<GetBasePricesResponse, Box<dyn Error>> {
+        pub async fn remote(
+            self,
+            client: &Client
+        ) -> Result<GetBasePricesResponse, Box<dyn Error>> {
             let uri = self.uri.clone();
             let url = format!("https://{host}{uri}", host = client.host, uri = uri);
-            let res = client
-                .reqwest
+            let res = client.reqwest
                 .get(&url)
                 .query(&self.query)
                 .bearer_auth(&client.authentication)
-                .send();
+                .send().await;
             match res {
                 Err(e) => Err(Box::new(e)),
-                Ok(response) => match response.json::<GetBasePricesResponse>() {
-                    Err(e) => Err(Box::new(e)),
-                    Ok(j) => Ok(j),
-                },
+                Ok(response) =>
+                    match response.json::<GetBasePricesResponse>().await {
+                        Err(e) => Err(Box::new(e)),
+                        Ok(j) => Ok(j),
+                    }
             }
         }
     }
@@ -163,17 +163,14 @@ pub mod get_price_range {
     #[allow(unused_imports)]
     use fxoanda_definitions::*;
     use std::error::Error;
-    use Client;
+    use crate::Client;
 
     #[derive(Debug, Serialize, Deserialize)]
     struct RequestHead {
         #[serde(rename = "Authorization", skip_serializing_if = "Option::is_none")]
         pub authorization: Option<String>,
 
-        #[serde(
-            rename = "AcceptDatetimeFormat",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "AcceptDatetimeFormat", skip_serializing_if = "Option::is_none")]
         pub accept_datetime_format: Option<String>,
     }
     impl RequestHead {
@@ -314,24 +311,24 @@ pub mod get_price_range {
             self
         }
 
-        pub fn remote(self, client: &Client) -> Result<GetPriceRangeResponse, Box<dyn Error>> {
-            let uri = self
-                .uri
-                .clone()
-                .replace("{instrument}", &self.path.instrument.unwrap());
+        pub async fn remote(
+            self,
+            client: &Client
+        ) -> Result<GetPriceRangeResponse, Box<dyn Error>> {
+            let uri = self.uri.clone().replace("{instrument}", &self.path.instrument.unwrap());
             let url = format!("https://{host}{uri}", host = client.host, uri = uri);
-            let res = client
-                .reqwest
+            let res = client.reqwest
                 .get(&url)
                 .query(&self.query)
                 .bearer_auth(&client.authentication)
-                .send();
+                .send().await;
             match res {
                 Err(e) => Err(Box::new(e)),
-                Ok(response) => match response.json::<GetPriceRangeResponse>() {
-                    Err(e) => Err(Box::new(e)),
-                    Ok(j) => Ok(j),
-                },
+                Ok(response) =>
+                    match response.json::<GetPriceRangeResponse>().await {
+                        Err(e) => Err(Box::new(e)),
+                        Ok(j) => Ok(j),
+                    }
             }
         }
     }

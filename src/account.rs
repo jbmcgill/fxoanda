@@ -4,7 +4,7 @@ pub mod list_positions {
     #[allow(unused_imports)]
     use fxoanda_definitions::*;
     use std::error::Error;
-    use Client;
+    use crate::Client;
 
     #[derive(Debug, Serialize, Deserialize)]
     struct RequestHead {
@@ -95,24 +95,24 @@ pub mod list_positions {
             self
         }
 
-        pub fn remote(self, client: &Client) -> Result<ListPositionsResponse, Box<dyn Error>> {
-            let uri = self
-                .uri
-                .clone()
-                .replace("{accountID}", &self.path.account_id.unwrap());
+        pub async fn remote(
+            self,
+            client: &Client
+        ) -> Result<ListPositionsResponse, Box<dyn Error>> {
+            let uri = self.uri.clone().replace("{accountID}", &self.path.account_id.unwrap());
             let url = format!("https://{host}{uri}", host = client.host, uri = uri);
-            let res = client
-                .reqwest
+            let res = client.reqwest
                 .get(&url)
                 .query(&self.query)
                 .bearer_auth(&client.authentication)
-                .send();
+                .send().await;
             match res {
                 Err(e) => Err(Box::new(e)),
-                Ok(response) => match response.json::<ListPositionsResponse>() {
-                    Err(e) => Err(Box::new(e)),
-                    Ok(j) => Ok(j),
-                },
+                Ok(response) =>
+                    match response.json::<ListPositionsResponse>().await {
+                        Err(e) => Err(Box::new(e)),
+                        Ok(j) => Ok(j),
+                    }
             }
         }
     }
@@ -146,7 +146,7 @@ pub mod list_open_positions {
     #[allow(unused_imports)]
     use fxoanda_definitions::*;
     use std::error::Error;
-    use Client;
+    use crate::Client;
 
     #[derive(Debug, Serialize, Deserialize)]
     struct RequestHead {
@@ -236,24 +236,24 @@ pub mod list_open_positions {
             self
         }
 
-        pub fn remote(self, client: &Client) -> Result<ListOpenPositionsResponse, Box<dyn Error>> {
-            let uri = self
-                .uri
-                .clone()
-                .replace("{accountID}", &self.path.account_id.unwrap());
+        pub async fn remote(
+            self,
+            client: &Client
+        ) -> Result<ListOpenPositionsResponse, Box<dyn Error>> {
+            let uri = self.uri.clone().replace("{accountID}", &self.path.account_id.unwrap());
             let url = format!("https://{host}{uri}", host = client.host, uri = uri);
-            let res = client
-                .reqwest
+            let res = client.reqwest
                 .get(&url)
                 .query(&self.query)
                 .bearer_auth(&client.authentication)
-                .send();
+                .send().await;
             match res {
                 Err(e) => Err(Box::new(e)),
-                Ok(response) => match response.json::<ListOpenPositionsResponse>() {
-                    Err(e) => Err(Box::new(e)),
-                    Ok(j) => Ok(j),
-                },
+                Ok(response) =>
+                    match response.json::<ListOpenPositionsResponse>().await {
+                        Err(e) => Err(Box::new(e)),
+                        Ok(j) => Ok(j),
+                    }
             }
         }
     }
@@ -287,7 +287,7 @@ pub mod get_position {
     #[allow(unused_imports)]
     use fxoanda_definitions::*;
     use std::error::Error;
-    use Client;
+    use crate::Client;
 
     #[derive(Debug, Serialize, Deserialize)]
     struct RequestHead {
@@ -393,25 +393,24 @@ pub mod get_position {
             self
         }
 
-        pub fn remote(self, client: &Client) -> Result<GetPositionResponse, Box<dyn Error>> {
-            let uri = self
-                .uri
+        pub async fn remote(self, client: &Client) -> Result<GetPositionResponse, Box<dyn Error>> {
+            let uri = self.uri
                 .clone()
                 .replace("{accountID}", &self.path.account_id.unwrap())
                 .replace("{instrument}", &self.path.instrument.unwrap());
             let url = format!("https://{host}{uri}", host = client.host, uri = uri);
-            let res = client
-                .reqwest
+            let res = client.reqwest
                 .get(&url)
                 .query(&self.query)
                 .bearer_auth(&client.authentication)
-                .send();
+                .send().await;
             match res {
                 Err(e) => Err(Box::new(e)),
-                Ok(response) => match response.json::<GetPositionResponse>() {
-                    Err(e) => Err(Box::new(e)),
-                    Ok(j) => Ok(j),
-                },
+                Ok(response) =>
+                    match response.json::<GetPositionResponse>().await {
+                        Err(e) => Err(Box::new(e)),
+                        Ok(j) => Ok(j),
+                    }
             }
         }
     }
@@ -445,17 +444,14 @@ pub mod close_position {
     #[allow(unused_imports)]
     use fxoanda_definitions::*;
     use std::error::Error;
-    use Client;
+    use crate::Client;
 
     #[derive(Debug, Serialize, Deserialize)]
     struct RequestHead {
         #[serde(rename = "Authorization", skip_serializing_if = "Option::is_none")]
         pub authorization: Option<String>,
 
-        #[serde(
-            rename = "AcceptDatetimeFormat",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "AcceptDatetimeFormat", skip_serializing_if = "Option::is_none")]
         pub accept_datetime_format: Option<String>,
     }
     impl RequestHead {
@@ -489,19 +485,13 @@ pub mod close_position {
         #[serde(rename = "longUnits", skip_serializing_if = "Option::is_none")]
         pub long_units: Option<String>,
 
-        #[serde(
-            rename = "longClientExtensions",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "longClientExtensions", skip_serializing_if = "Option::is_none")]
         pub long_client_extensions: Option<ClientExtensions>,
 
         #[serde(rename = "shortUnits", skip_serializing_if = "Option::is_none")]
         pub short_units: Option<String>,
 
-        #[serde(
-            rename = "shortClientExtensions",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "shortClientExtensions", skip_serializing_if = "Option::is_none")]
         pub short_client_extensions: Option<ClientExtensions>,
     }
     impl RequestBody {
@@ -630,26 +620,28 @@ pub mod close_position {
             self
         }
 
-        pub fn remote(self, client: &Client) -> Result<ClosePositionResponse, Box<dyn Error>> {
-            let uri = self
-                .uri
+        pub async fn remote(
+            self,
+            client: &Client
+        ) -> Result<ClosePositionResponse, Box<dyn Error>> {
+            let uri = self.uri
                 .clone()
                 .replace("{accountID}", &self.path.account_id.unwrap())
                 .replace("{instrument}", &self.path.instrument.unwrap());
             let url = format!("https://{host}{uri}", host = client.host, uri = uri);
-            let res = client
-                .reqwest
+            let res = client.reqwest
                 .put(&url)
                 .query(&self.query)
                 .json::<RequestBody>(&self.body)
                 .bearer_auth(&client.authentication)
-                .send();
+                .send().await;
             match res {
                 Err(e) => Err(Box::new(e)),
-                Ok(response) => match response.json::<ClosePositionResponse>() {
-                    Err(e) => Err(Box::new(e)),
-                    Ok(j) => Ok(j),
-                },
+                Ok(response) =>
+                    match response.json::<ClosePositionResponse>().await {
+                        Err(e) => Err(Box::new(e)),
+                        Ok(j) => Ok(j),
+                    }
             }
         }
     }
@@ -676,24 +668,15 @@ pub mod close_position {
         /// specialized when they are created to accomplish a specific task: to
         /// close a Trade, to closeout a Position or to particiate in in a Margin
         /// closeout.
-        #[serde(
-            rename = "longOrderCreateTransaction",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "longOrderCreateTransaction", skip_serializing_if = "Option::is_none")]
         pub long_order_create_transaction: Option<MarketOrderTransaction>,
         /// An OrderFillTransaction represents the filling of an Order in the
         /// client's Account.
-        #[serde(
-            rename = "longOrderFillTransaction",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "longOrderFillTransaction", skip_serializing_if = "Option::is_none")]
         pub long_order_fill_transaction: Option<OrderFillTransaction>,
         /// An OrderCancelTransaction represents the cancellation of an Order in
         /// the client's Account.
-        #[serde(
-            rename = "longOrderCancelTransaction",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "longOrderCancelTransaction", skip_serializing_if = "Option::is_none")]
         pub long_order_cancel_transaction: Option<OrderCancelTransaction>,
         /// A MarketOrderTransaction represents the creation of a Market Order in
         /// the user's account. A Market Order is an Order that is filled
@@ -701,31 +684,19 @@ pub mod close_position {
         /// specialized when they are created to accomplish a specific task: to
         /// close a Trade, to closeout a Position or to particiate in in a Margin
         /// closeout.
-        #[serde(
-            rename = "shortOrderCreateTransaction",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "shortOrderCreateTransaction", skip_serializing_if = "Option::is_none")]
         pub short_order_create_transaction: Option<MarketOrderTransaction>,
         /// An OrderFillTransaction represents the filling of an Order in the
         /// client's Account.
-        #[serde(
-            rename = "shortOrderFillTransaction",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "shortOrderFillTransaction", skip_serializing_if = "Option::is_none")]
         pub short_order_fill_transaction: Option<OrderFillTransaction>,
         /// An OrderCancelTransaction represents the cancellation of an Order in
         /// the client's Account.
-        #[serde(
-            rename = "shortOrderCancelTransaction",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "shortOrderCancelTransaction", skip_serializing_if = "Option::is_none")]
         pub short_order_cancel_transaction: Option<OrderCancelTransaction>,
         /// The IDs of all Transactions that were created while satisfying the
         /// request.
-        #[serde(
-            rename = "relatedTransactionIDs",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "relatedTransactionIDs", skip_serializing_if = "Option::is_none")]
         pub related_transaction_i_ds: Option<Vec<String>>,
         /// The ID of the most recent Transaction created for the Account
         /// format: String representation of the numerical OANDA-assigned TransactionID
@@ -740,17 +711,14 @@ pub mod list_trades {
     #[allow(unused_imports)]
     use fxoanda_definitions::*;
     use std::error::Error;
-    use Client;
+    use crate::Client;
 
     #[derive(Debug, Serialize, Deserialize)]
     struct RequestHead {
         #[serde(rename = "Authorization", skip_serializing_if = "Option::is_none")]
         pub authorization: Option<String>,
 
-        #[serde(
-            rename = "AcceptDatetimeFormat",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "AcceptDatetimeFormat", skip_serializing_if = "Option::is_none")]
         pub accept_datetime_format: Option<String>,
     }
     impl RequestHead {
@@ -911,24 +879,21 @@ pub mod list_trades {
             self
         }
 
-        pub fn remote(self, client: &Client) -> Result<ListTradesResponse, Box<dyn Error>> {
-            let uri = self
-                .uri
-                .clone()
-                .replace("{accountID}", &self.path.account_id.unwrap());
+        pub async fn remote(self, client: &Client) -> Result<ListTradesResponse, Box<dyn Error>> {
+            let uri = self.uri.clone().replace("{accountID}", &self.path.account_id.unwrap());
             let url = format!("https://{host}{uri}", host = client.host, uri = uri);
-            let res = client
-                .reqwest
+            let res = client.reqwest
                 .get(&url)
                 .query(&self.query)
                 .bearer_auth(&client.authentication)
-                .send();
+                .send().await;
             match res {
                 Err(e) => Err(Box::new(e)),
-                Ok(response) => match response.json::<ListTradesResponse>() {
-                    Err(e) => Err(Box::new(e)),
-                    Ok(j) => Ok(j),
-                },
+                Ok(response) =>
+                    match response.json::<ListTradesResponse>().await {
+                        Err(e) => Err(Box::new(e)),
+                        Ok(j) => Ok(j),
+                    }
             }
         }
     }
@@ -965,17 +930,14 @@ pub mod list_open_trades {
     #[allow(unused_imports)]
     use fxoanda_definitions::*;
     use std::error::Error;
-    use Client;
+    use crate::Client;
 
     #[derive(Debug, Serialize, Deserialize)]
     struct RequestHead {
         #[serde(rename = "Authorization", skip_serializing_if = "Option::is_none")]
         pub authorization: Option<String>,
 
-        #[serde(
-            rename = "AcceptDatetimeFormat",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "AcceptDatetimeFormat", skip_serializing_if = "Option::is_none")]
         pub accept_datetime_format: Option<String>,
     }
     impl RequestHead {
@@ -1069,24 +1031,24 @@ pub mod list_open_trades {
             self
         }
 
-        pub fn remote(self, client: &Client) -> Result<ListOpenTradesResponse, Box<dyn Error>> {
-            let uri = self
-                .uri
-                .clone()
-                .replace("{accountID}", &self.path.account_id.unwrap());
+        pub async fn remote(
+            self,
+            client: &Client
+        ) -> Result<ListOpenTradesResponse, Box<dyn Error>> {
+            let uri = self.uri.clone().replace("{accountID}", &self.path.account_id.unwrap());
             let url = format!("https://{host}{uri}", host = client.host, uri = uri);
-            let res = client
-                .reqwest
+            let res = client.reqwest
                 .get(&url)
                 .query(&self.query)
                 .bearer_auth(&client.authentication)
-                .send();
+                .send().await;
             match res {
                 Err(e) => Err(Box::new(e)),
-                Ok(response) => match response.json::<ListOpenTradesResponse>() {
-                    Err(e) => Err(Box::new(e)),
-                    Ok(j) => Ok(j),
-                },
+                Ok(response) =>
+                    match response.json::<ListOpenTradesResponse>().await {
+                        Err(e) => Err(Box::new(e)),
+                        Ok(j) => Ok(j),
+                    }
             }
         }
     }
@@ -1120,17 +1082,14 @@ pub mod get_trade {
     #[allow(unused_imports)]
     use fxoanda_definitions::*;
     use std::error::Error;
-    use Client;
+    use crate::Client;
 
     #[derive(Debug, Serialize, Deserialize)]
     struct RequestHead {
         #[serde(rename = "Authorization", skip_serializing_if = "Option::is_none")]
         pub authorization: Option<String>,
 
-        #[serde(
-            rename = "AcceptDatetimeFormat",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "AcceptDatetimeFormat", skip_serializing_if = "Option::is_none")]
         pub accept_datetime_format: Option<String>,
     }
     impl RequestHead {
@@ -1240,25 +1199,24 @@ pub mod get_trade {
             self
         }
 
-        pub fn remote(self, client: &Client) -> Result<GetTradeResponse, Box<dyn Error>> {
-            let uri = self
-                .uri
+        pub async fn remote(self, client: &Client) -> Result<GetTradeResponse, Box<dyn Error>> {
+            let uri = self.uri
                 .clone()
                 .replace("{accountID}", &self.path.account_id.unwrap())
                 .replace("{tradeSpecifier}", &self.path.trade_specifier.unwrap());
             let url = format!("https://{host}{uri}", host = client.host, uri = uri);
-            let res = client
-                .reqwest
+            let res = client.reqwest
                 .get(&url)
                 .query(&self.query)
                 .bearer_auth(&client.authentication)
-                .send();
+                .send().await;
             match res {
                 Err(e) => Err(Box::new(e)),
-                Ok(response) => match response.json::<GetTradeResponse>() {
-                    Err(e) => Err(Box::new(e)),
-                    Ok(j) => Ok(j),
-                },
+                Ok(response) =>
+                    match response.json::<GetTradeResponse>().await {
+                        Err(e) => Err(Box::new(e)),
+                        Ok(j) => Ok(j),
+                    }
             }
         }
     }
@@ -1294,17 +1252,14 @@ pub mod close_trade {
     #[allow(unused_imports)]
     use fxoanda_definitions::*;
     use std::error::Error;
-    use Client;
+    use crate::Client;
 
     #[derive(Debug, Serialize, Deserialize)]
     struct RequestHead {
         #[serde(rename = "Authorization", skip_serializing_if = "Option::is_none")]
         pub authorization: Option<String>,
 
-        #[serde(
-            rename = "AcceptDatetimeFormat",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "AcceptDatetimeFormat", skip_serializing_if = "Option::is_none")]
         pub accept_datetime_format: Option<String>,
     }
     impl RequestHead {
@@ -1430,26 +1385,25 @@ pub mod close_trade {
             self
         }
 
-        pub fn remote(self, client: &Client) -> Result<CloseTradeResponse, Box<dyn Error>> {
-            let uri = self
-                .uri
+        pub async fn remote(self, client: &Client) -> Result<CloseTradeResponse, Box<dyn Error>> {
+            let uri = self.uri
                 .clone()
                 .replace("{accountID}", &self.path.account_id.unwrap())
                 .replace("{tradeSpecifier}", &self.path.trade_specifier.unwrap());
             let url = format!("https://{host}{uri}", host = client.host, uri = uri);
-            let res = client
-                .reqwest
+            let res = client.reqwest
                 .put(&url)
                 .query(&self.query)
                 .json::<RequestBody>(&self.body)
                 .bearer_auth(&client.authentication)
-                .send();
+                .send().await;
             match res {
                 Err(e) => Err(Box::new(e)),
-                Ok(response) => match response.json::<CloseTradeResponse>() {
-                    Err(e) => Err(Box::new(e)),
-                    Ok(j) => Ok(j),
-                },
+                Ok(response) =>
+                    match response.json::<CloseTradeResponse>().await {
+                        Err(e) => Err(Box::new(e)),
+                        Ok(j) => Ok(j),
+                    }
             }
         }
     }
@@ -1473,31 +1427,19 @@ pub mod close_trade {
         /// specialized when they are created to accomplish a specific task: to
         /// close a Trade, to closeout a Position or to particiate in in a Margin
         /// closeout.
-        #[serde(
-            rename = "orderCreateTransaction",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "orderCreateTransaction", skip_serializing_if = "Option::is_none")]
         pub order_create_transaction: Option<MarketOrderTransaction>,
         /// An OrderFillTransaction represents the filling of an Order in the
         /// client's Account.
-        #[serde(
-            rename = "orderFillTransaction",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "orderFillTransaction", skip_serializing_if = "Option::is_none")]
         pub order_fill_transaction: Option<OrderFillTransaction>,
         /// An OrderCancelTransaction represents the cancellation of an Order in
         /// the client's Account.
-        #[serde(
-            rename = "orderCancelTransaction",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "orderCancelTransaction", skip_serializing_if = "Option::is_none")]
         pub order_cancel_transaction: Option<OrderCancelTransaction>,
         /// The IDs of all Transactions that were created while satisfying the
         /// request.
-        #[serde(
-            rename = "relatedTransactionIDs",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "relatedTransactionIDs", skip_serializing_if = "Option::is_none")]
         pub related_transaction_i_ds: Option<Vec<String>>,
         /// The ID of the most recent Transaction created for the Account
         /// format: String representation of the numerical OANDA-assigned TransactionID
@@ -1512,17 +1454,14 @@ pub mod set_trade_client_extensions {
     #[allow(unused_imports)]
     use fxoanda_definitions::*;
     use std::error::Error;
-    use Client;
+    use crate::Client;
 
     #[derive(Debug, Serialize, Deserialize)]
     struct RequestHead {
         #[serde(rename = "Authorization", skip_serializing_if = "Option::is_none")]
         pub authorization: Option<String>,
 
-        #[serde(
-            rename = "AcceptDatetimeFormat",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "AcceptDatetimeFormat", skip_serializing_if = "Option::is_none")]
         pub accept_datetime_format: Option<String>,
     }
     impl RequestHead {
@@ -1590,7 +1529,7 @@ pub mod set_trade_client_extensions {
         pub fn new() -> SetTradeClientExtensionsRequest {
             SetTradeClientExtensionsRequest {
                 uri: String::from(
-                    "/v3/accounts/{accountID}/trades/{tradeSpecifier}/clientExtensions",
+                    "/v3/accounts/{accountID}/trades/{tradeSpecifier}/clientExtensions"
                 ),
                 header: RequestHead::new(),
                 body: RequestBody::new(),
@@ -1650,29 +1589,28 @@ pub mod set_trade_client_extensions {
             self
         }
 
-        pub fn remote(
+        pub async fn remote(
             self,
-            client: &Client,
+            client: &Client
         ) -> Result<SetTradeClientExtensionsResponse, Box<dyn Error>> {
-            let uri = self
-                .uri
+            let uri = self.uri
                 .clone()
                 .replace("{accountID}", &self.path.account_id.unwrap())
                 .replace("{tradeSpecifier}", &self.path.trade_specifier.unwrap());
             let url = format!("https://{host}{uri}", host = client.host, uri = uri);
-            let res = client
-                .reqwest
+            let res = client.reqwest
                 .put(&url)
                 .query(&self.query)
                 .json::<RequestBody>(&self.body)
                 .bearer_auth(&client.authentication)
-                .send();
+                .send().await;
             match res {
                 Err(e) => Err(Box::new(e)),
-                Ok(response) => match response.json::<SetTradeClientExtensionsResponse>() {
-                    Err(e) => Err(Box::new(e)),
-                    Ok(j) => Ok(j),
-                },
+                Ok(response) =>
+                    match response.json::<SetTradeClientExtensionsResponse>().await {
+                        Err(e) => Err(Box::new(e)),
+                        Ok(j) => Ok(j),
+                    }
             }
         }
     }
@@ -1696,14 +1634,10 @@ pub mod set_trade_client_extensions {
             rename = "tradeClientExtensionsModifyTransaction",
             skip_serializing_if = "Option::is_none"
         )]
-        pub trade_client_extensions_modify_transaction:
-            Option<TradeClientExtensionsModifyTransaction>,
+        pub trade_client_extensions_modify_transaction: Option<TradeClientExtensionsModifyTransaction>,
         /// The IDs of all Transactions that were created while satisfying the
         /// request.
-        #[serde(
-            rename = "relatedTransactionIDs",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "relatedTransactionIDs", skip_serializing_if = "Option::is_none")]
         pub related_transaction_i_ds: Option<Vec<String>>,
         /// The ID of the most recent Transaction created for the Account
         /// format: String representation of the numerical OANDA-assigned TransactionID
@@ -1718,17 +1652,14 @@ pub mod set_trade_dependent_orders {
     #[allow(unused_imports)]
     use fxoanda_definitions::*;
     use std::error::Error;
-    use Client;
+    use crate::Client;
 
     #[derive(Debug, Serialize, Deserialize)]
     struct RequestHead {
         #[serde(rename = "Authorization", skip_serializing_if = "Option::is_none")]
         pub authorization: Option<String>,
 
-        #[serde(
-            rename = "AcceptDatetimeFormat",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "AcceptDatetimeFormat", skip_serializing_if = "Option::is_none")]
         pub accept_datetime_format: Option<String>,
     }
     impl RequestHead {
@@ -1886,29 +1817,28 @@ pub mod set_trade_dependent_orders {
             self
         }
 
-        pub fn remote(
+        pub async fn remote(
             self,
-            client: &Client,
+            client: &Client
         ) -> Result<SetTradeDependentOrdersResponse, Box<dyn Error>> {
-            let uri = self
-                .uri
+            let uri = self.uri
                 .clone()
                 .replace("{accountID}", &self.path.account_id.unwrap())
                 .replace("{tradeSpecifier}", &self.path.trade_specifier.unwrap());
             let url = format!("https://{host}{uri}", host = client.host, uri = uri);
-            let res = client
-                .reqwest
+            let res = client.reqwest
                 .put(&url)
                 .query(&self.query)
                 .json::<RequestBody>(&self.body)
                 .bearer_auth(&client.authentication)
-                .send();
+                .send().await;
             match res {
                 Err(e) => Err(Box::new(e)),
-                Ok(response) => match response.json::<SetTradeDependentOrdersResponse>() {
-                    Err(e) => Err(Box::new(e)),
-                    Ok(j) => Ok(j),
-                },
+                Ok(response) =>
+                    match response.json::<SetTradeDependentOrdersResponse>().await {
+                        Err(e) => Err(Box::new(e)),
+                        Ok(j) => Ok(j),
+                    }
             }
         }
     }
@@ -1935,17 +1865,11 @@ pub mod set_trade_dependent_orders {
         pub take_profit_order_cancel_transaction: Option<OrderCancelTransaction>,
         /// A TakeProfitOrderTransaction represents the creation of a TakeProfit
         /// Order in the user's Account.
-        #[serde(
-            rename = "takeProfitOrderTransaction",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "takeProfitOrderTransaction", skip_serializing_if = "Option::is_none")]
         pub take_profit_order_transaction: Option<TakeProfitOrderTransaction>,
         /// An OrderFillTransaction represents the filling of an Order in the
         /// client's Account.
-        #[serde(
-            rename = "takeProfitOrderFillTransaction",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "takeProfitOrderFillTransaction", skip_serializing_if = "Option::is_none")]
         pub take_profit_order_fill_transaction: Option<OrderFillTransaction>,
         /// An OrderCancelTransaction represents the cancellation of an Order in
         /// the client's Account.
@@ -1956,24 +1880,15 @@ pub mod set_trade_dependent_orders {
         pub take_profit_order_created_cancel_transaction: Option<OrderCancelTransaction>,
         /// An OrderCancelTransaction represents the cancellation of an Order in
         /// the client's Account.
-        #[serde(
-            rename = "stopLossOrderCancelTransaction",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "stopLossOrderCancelTransaction", skip_serializing_if = "Option::is_none")]
         pub stop_loss_order_cancel_transaction: Option<OrderCancelTransaction>,
         /// A StopLossOrderTransaction represents the creation of a StopLoss Order
         /// in the user's Account.
-        #[serde(
-            rename = "stopLossOrderTransaction",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "stopLossOrderTransaction", skip_serializing_if = "Option::is_none")]
         pub stop_loss_order_transaction: Option<StopLossOrderTransaction>,
         /// An OrderFillTransaction represents the filling of an Order in the
         /// client's Account.
-        #[serde(
-            rename = "stopLossOrderFillTransaction",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "stopLossOrderFillTransaction", skip_serializing_if = "Option::is_none")]
         pub stop_loss_order_fill_transaction: Option<OrderFillTransaction>,
         /// An OrderCancelTransaction represents the cancellation of an Order in
         /// the client's Account.
@@ -1998,10 +1913,7 @@ pub mod set_trade_dependent_orders {
         pub trailing_stop_loss_order_transaction: Option<TrailingStopLossOrderTransaction>,
         /// The IDs of all Transactions that were created while satisfying the
         /// request.
-        #[serde(
-            rename = "relatedTransactionIDs",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "relatedTransactionIDs", skip_serializing_if = "Option::is_none")]
         pub related_transaction_i_ds: Option<Vec<String>>,
         /// The ID of the most recent Transaction created for the Account
         /// format: String representation of the numerical OANDA-assigned TransactionID
@@ -2016,7 +1928,7 @@ pub mod list_accounts {
     #[allow(unused_imports)]
     use fxoanda_definitions::*;
     use std::error::Error;
-    use Client;
+    use crate::Client;
 
     #[derive(Debug, Serialize, Deserialize)]
     struct RequestHead {
@@ -2092,21 +2004,21 @@ pub mod list_accounts {
             self
         }
 
-        pub fn remote(self, client: &Client) -> Result<ListAccountsResponse, Box<dyn Error>> {
+        pub async fn remote(self, client: &Client) -> Result<ListAccountsResponse, Box<dyn Error>> {
             let uri = self.uri.clone();
             let url = format!("https://{host}{uri}", host = client.host, uri = uri);
-            let res = client
-                .reqwest
+            let res = client.reqwest
                 .get(&url)
                 .query(&self.query)
                 .bearer_auth(&client.authentication)
-                .send();
+                .send().await;
             match res {
                 Err(e) => Err(Box::new(e)),
-                Ok(response) => match response.json::<ListAccountsResponse>() {
-                    Err(e) => Err(Box::new(e)),
-                    Ok(j) => Ok(j),
-                },
+                Ok(response) =>
+                    match response.json::<ListAccountsResponse>().await {
+                        Err(e) => Err(Box::new(e)),
+                        Ok(j) => Ok(j),
+                    }
             }
         }
     }
@@ -2137,17 +2049,14 @@ pub mod get_account {
     #[allow(unused_imports)]
     use fxoanda_definitions::*;
     use std::error::Error;
-    use Client;
+    use crate::Client;
 
     #[derive(Debug, Serialize, Deserialize)]
     struct RequestHead {
         #[serde(rename = "Authorization", skip_serializing_if = "Option::is_none")]
         pub authorization: Option<String>,
 
-        #[serde(
-            rename = "AcceptDatetimeFormat",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "AcceptDatetimeFormat", skip_serializing_if = "Option::is_none")]
         pub accept_datetime_format: Option<String>,
     }
     impl RequestHead {
@@ -2243,24 +2152,21 @@ pub mod get_account {
             self
         }
 
-        pub fn remote(self, client: &Client) -> Result<GetAccountResponse, Box<dyn Error>> {
-            let uri = self
-                .uri
-                .clone()
-                .replace("{accountID}", &self.path.account_id.unwrap());
+        pub async fn remote(self, client: &Client) -> Result<GetAccountResponse, Box<dyn Error>> {
+            let uri = self.uri.clone().replace("{accountID}", &self.path.account_id.unwrap());
             let url = format!("https://{host}{uri}", host = client.host, uri = uri);
-            let res = client
-                .reqwest
+            let res = client.reqwest
                 .get(&url)
                 .query(&self.query)
                 .bearer_auth(&client.authentication)
-                .send();
+                .send().await;
             match res {
                 Err(e) => Err(Box::new(e)),
-                Ok(response) => match response.json::<GetAccountResponse>() {
-                    Err(e) => Err(Box::new(e)),
-                    Ok(j) => Ok(j),
-                },
+                Ok(response) =>
+                    match response.json::<GetAccountResponse>().await {
+                        Err(e) => Err(Box::new(e)),
+                        Ok(j) => Ok(j),
+                    }
             }
         }
     }
@@ -2295,17 +2201,14 @@ pub mod get_account_summary {
     #[allow(unused_imports)]
     use fxoanda_definitions::*;
     use std::error::Error;
-    use Client;
+    use crate::Client;
 
     #[derive(Debug, Serialize, Deserialize)]
     struct RequestHead {
         #[serde(rename = "Authorization", skip_serializing_if = "Option::is_none")]
         pub authorization: Option<String>,
 
-        #[serde(
-            rename = "AcceptDatetimeFormat",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "AcceptDatetimeFormat", skip_serializing_if = "Option::is_none")]
         pub accept_datetime_format: Option<String>,
     }
     impl RequestHead {
@@ -2399,24 +2302,24 @@ pub mod get_account_summary {
             self
         }
 
-        pub fn remote(self, client: &Client) -> Result<GetAccountSummaryResponse, Box<dyn Error>> {
-            let uri = self
-                .uri
-                .clone()
-                .replace("{accountID}", &self.path.account_id.unwrap());
+        pub async fn remote(
+            self,
+            client: &Client
+        ) -> Result<GetAccountSummaryResponse, Box<dyn Error>> {
+            let uri = self.uri.clone().replace("{accountID}", &self.path.account_id.unwrap());
             let url = format!("https://{host}{uri}", host = client.host, uri = uri);
-            let res = client
-                .reqwest
+            let res = client.reqwest
                 .get(&url)
                 .query(&self.query)
                 .bearer_auth(&client.authentication)
-                .send();
+                .send().await;
             match res {
                 Err(e) => Err(Box::new(e)),
-                Ok(response) => match response.json::<GetAccountSummaryResponse>() {
-                    Err(e) => Err(Box::new(e)),
-                    Ok(j) => Ok(j),
-                },
+                Ok(response) =>
+                    match response.json::<GetAccountSummaryResponse>().await {
+                        Err(e) => Err(Box::new(e)),
+                        Ok(j) => Ok(j),
+                    }
             }
         }
     }
@@ -2452,7 +2355,7 @@ pub mod get_account_instruments {
     #[allow(unused_imports)]
     use fxoanda_definitions::*;
     use std::error::Error;
-    use Client;
+    use crate::Client;
 
     #[derive(Debug, Serialize, Deserialize)]
     struct RequestHead {
@@ -2555,27 +2458,24 @@ pub mod get_account_instruments {
             self
         }
 
-        pub fn remote(
+        pub async fn remote(
             self,
-            client: &Client,
+            client: &Client
         ) -> Result<GetAccountInstrumentsResponse, Box<dyn Error>> {
-            let uri = self
-                .uri
-                .clone()
-                .replace("{accountID}", &self.path.account_id.unwrap());
+            let uri = self.uri.clone().replace("{accountID}", &self.path.account_id.unwrap());
             let url = format!("https://{host}{uri}", host = client.host, uri = uri);
-            let res = client
-                .reqwest
+            let res = client.reqwest
                 .get(&url)
                 .query(&self.query)
                 .bearer_auth(&client.authentication)
-                .send();
+                .send().await;
             match res {
                 Err(e) => Err(Box::new(e)),
-                Ok(response) => match response.json::<GetAccountInstrumentsResponse>() {
-                    Err(e) => Err(Box::new(e)),
-                    Ok(j) => Ok(j),
-                },
+                Ok(response) =>
+                    match response.json::<GetAccountInstrumentsResponse>().await {
+                        Err(e) => Err(Box::new(e)),
+                        Ok(j) => Ok(j),
+                    }
             }
         }
     }
@@ -2609,17 +2509,14 @@ pub mod configure_account {
     #[allow(unused_imports)]
     use fxoanda_definitions::*;
     use std::error::Error;
-    use Client;
+    use crate::Client;
 
     #[derive(Debug, Serialize, Deserialize)]
     struct RequestHead {
         #[serde(rename = "Authorization", skip_serializing_if = "Option::is_none")]
         pub authorization: Option<String>,
 
-        #[serde(
-            rename = "AcceptDatetimeFormat",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "AcceptDatetimeFormat", skip_serializing_if = "Option::is_none")]
         pub accept_datetime_format: Option<String>,
     }
     impl RequestHead {
@@ -2744,25 +2641,25 @@ pub mod configure_account {
             self
         }
 
-        pub fn remote(self, client: &Client) -> Result<ConfigureAccountResponse, Box<dyn Error>> {
-            let uri = self
-                .uri
-                .clone()
-                .replace("{accountID}", &self.path.account_id.unwrap());
+        pub async fn remote(
+            self,
+            client: &Client
+        ) -> Result<ConfigureAccountResponse, Box<dyn Error>> {
+            let uri = self.uri.clone().replace("{accountID}", &self.path.account_id.unwrap());
             let url = format!("https://{host}{uri}", host = client.host, uri = uri);
-            let res = client
-                .reqwest
+            let res = client.reqwest
                 .patch(&url)
                 .query(&self.query)
                 .json::<RequestBody>(&self.body)
                 .bearer_auth(&client.authentication)
-                .send();
+                .send().await;
             match res {
                 Err(e) => Err(Box::new(e)),
-                Ok(response) => match response.json::<ConfigureAccountResponse>() {
-                    Err(e) => Err(Box::new(e)),
-                    Ok(j) => Ok(j),
-                },
+                Ok(response) =>
+                    match response.json::<ConfigureAccountResponse>().await {
+                        Err(e) => Err(Box::new(e)),
+                        Ok(j) => Ok(j),
+                    }
             }
         }
     }
@@ -2782,10 +2679,7 @@ pub mod configure_account {
     pub struct ConfigureAccountResponse200Body {
         /// A ClientConfigureTransaction represents the configuration of an
         /// Account by a client.
-        #[serde(
-            rename = "clientConfigureTransaction",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "clientConfigureTransaction", skip_serializing_if = "Option::is_none")]
         pub client_configure_transaction: Option<ClientConfigureTransaction>,
         /// The ID of the last Transaction created for the Account.
         /// format: String representation of the numerical OANDA-assigned TransactionID
@@ -2800,17 +2694,14 @@ pub mod get_account_changes {
     #[allow(unused_imports)]
     use fxoanda_definitions::*;
     use std::error::Error;
-    use Client;
+    use crate::Client;
 
     #[derive(Debug, Serialize, Deserialize)]
     struct RequestHead {
         #[serde(rename = "Authorization", skip_serializing_if = "Option::is_none")]
         pub authorization: Option<String>,
 
-        #[serde(
-            rename = "AcceptDatetimeFormat",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "AcceptDatetimeFormat", skip_serializing_if = "Option::is_none")]
         pub accept_datetime_format: Option<String>,
     }
     impl RequestHead {
@@ -2919,24 +2810,24 @@ pub mod get_account_changes {
             self
         }
 
-        pub fn remote(self, client: &Client) -> Result<GetAccountChangesResponse, Box<dyn Error>> {
-            let uri = self
-                .uri
-                .clone()
-                .replace("{accountID}", &self.path.account_id.unwrap());
+        pub async fn remote(
+            self,
+            client: &Client
+        ) -> Result<GetAccountChangesResponse, Box<dyn Error>> {
+            let uri = self.uri.clone().replace("{accountID}", &self.path.account_id.unwrap());
             let url = format!("https://{host}{uri}", host = client.host, uri = uri);
-            let res = client
-                .reqwest
+            let res = client.reqwest
                 .get(&url)
                 .query(&self.query)
                 .bearer_auth(&client.authentication)
-                .send();
+                .send().await;
             match res {
                 Err(e) => Err(Box::new(e)),
-                Ok(response) => match response.json::<GetAccountChangesResponse>() {
-                    Err(e) => Err(Box::new(e)),
-                    Ok(j) => Ok(j),
-                },
+                Ok(response) =>
+                    match response.json::<GetAccountChangesResponse>().await {
+                        Err(e) => Err(Box::new(e)),
+                        Ok(j) => Ok(j),
+                    }
             }
         }
     }
@@ -2980,17 +2871,14 @@ pub mod list_transactions {
     #[allow(unused_imports)]
     use fxoanda_definitions::*;
     use std::error::Error;
-    use Client;
+    use crate::Client;
 
     #[derive(Debug, Serialize, Deserialize)]
     struct RequestHead {
         #[serde(rename = "Authorization", skip_serializing_if = "Option::is_none")]
         pub authorization: Option<String>,
 
-        #[serde(
-            rename = "AcceptDatetimeFormat",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "AcceptDatetimeFormat", skip_serializing_if = "Option::is_none")]
         pub accept_datetime_format: Option<String>,
     }
     impl RequestHead {
@@ -3156,24 +3044,24 @@ pub mod list_transactions {
             self
         }
 
-        pub fn remote(self, client: &Client) -> Result<ListTransactionsResponse, Box<dyn Error>> {
-            let uri = self
-                .uri
-                .clone()
-                .replace("{accountID}", &self.path.account_id.unwrap());
+        pub async fn remote(
+            self,
+            client: &Client
+        ) -> Result<ListTransactionsResponse, Box<dyn Error>> {
+            let uri = self.uri.clone().replace("{accountID}", &self.path.account_id.unwrap());
             let url = format!("https://{host}{uri}", host = client.host, uri = uri);
-            let res = client
-                .reqwest
+            let res = client.reqwest
                 .get(&url)
                 .query(&self.query)
                 .bearer_auth(&client.authentication)
-                .send();
+                .send().await;
             match res {
                 Err(e) => Err(Box::new(e)),
-                Ok(response) => match response.json::<ListTransactionsResponse>() {
-                    Err(e) => Err(Box::new(e)),
-                    Ok(j) => Ok(j),
-                },
+                Ok(response) =>
+                    match response.json::<ListTransactionsResponse>().await {
+                        Err(e) => Err(Box::new(e)),
+                        Ok(j) => Ok(j),
+                    }
             }
         }
     }
@@ -3243,17 +3131,14 @@ pub mod get_transaction {
     #[allow(unused_imports)]
     use fxoanda_definitions::*;
     use std::error::Error;
-    use Client;
+    use crate::Client;
 
     #[derive(Debug, Serialize, Deserialize)]
     struct RequestHead {
         #[serde(rename = "Authorization", skip_serializing_if = "Option::is_none")]
         pub authorization: Option<String>,
 
-        #[serde(
-            rename = "AcceptDatetimeFormat",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "AcceptDatetimeFormat", skip_serializing_if = "Option::is_none")]
         pub accept_datetime_format: Option<String>,
     }
     impl RequestHead {
@@ -3362,25 +3247,27 @@ pub mod get_transaction {
             self
         }
 
-        pub fn remote(self, client: &Client) -> Result<GetTransactionResponse, Box<dyn Error>> {
-            let uri = self
-                .uri
+        pub async fn remote(
+            self,
+            client: &Client
+        ) -> Result<GetTransactionResponse, Box<dyn Error>> {
+            let uri = self.uri
                 .clone()
                 .replace("{accountID}", &self.path.account_id.unwrap())
                 .replace("{transactionID}", &self.path.transaction_id.unwrap());
             let url = format!("https://{host}{uri}", host = client.host, uri = uri);
-            let res = client
-                .reqwest
+            let res = client.reqwest
                 .get(&url)
                 .query(&self.query)
                 .bearer_auth(&client.authentication)
-                .send();
+                .send().await;
             match res {
                 Err(e) => Err(Box::new(e)),
-                Ok(response) => match response.json::<GetTransactionResponse>() {
-                    Err(e) => Err(Box::new(e)),
-                    Ok(j) => Ok(j),
-                },
+                Ok(response) =>
+                    match response.json::<GetTransactionResponse>().await {
+                        Err(e) => Err(Box::new(e)),
+                        Ok(j) => Ok(j),
+                    }
             }
         }
     }
@@ -3415,17 +3302,14 @@ pub mod get_transaction_range {
     #[allow(unused_imports)]
     use fxoanda_definitions::*;
     use std::error::Error;
-    use Client;
+    use crate::Client;
 
     #[derive(Debug, Serialize, Deserialize)]
     struct RequestHead {
         #[serde(rename = "Authorization", skip_serializing_if = "Option::is_none")]
         pub authorization: Option<String>,
 
-        #[serde(
-            rename = "AcceptDatetimeFormat",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "AcceptDatetimeFormat", skip_serializing_if = "Option::is_none")]
         pub accept_datetime_format: Option<String>,
     }
     impl RequestHead {
@@ -3559,27 +3443,24 @@ pub mod get_transaction_range {
             self
         }
 
-        pub fn remote(
+        pub async fn remote(
             self,
-            client: &Client,
+            client: &Client
         ) -> Result<GetTransactionRangeResponse, Box<dyn Error>> {
-            let uri = self
-                .uri
-                .clone()
-                .replace("{accountID}", &self.path.account_id.unwrap());
+            let uri = self.uri.clone().replace("{accountID}", &self.path.account_id.unwrap());
             let url = format!("https://{host}{uri}", host = client.host, uri = uri);
-            let res = client
-                .reqwest
+            let res = client.reqwest
                 .get(&url)
                 .query(&self.query)
                 .bearer_auth(&client.authentication)
-                .send();
+                .send().await;
             match res {
                 Err(e) => Err(Box::new(e)),
-                Ok(response) => match response.json::<GetTransactionRangeResponse>() {
-                    Err(e) => Err(Box::new(e)),
-                    Ok(j) => Ok(j),
-                },
+                Ok(response) =>
+                    match response.json::<GetTransactionRangeResponse>().await {
+                        Err(e) => Err(Box::new(e)),
+                        Ok(j) => Ok(j),
+                    }
             }
         }
     }
@@ -3613,17 +3494,14 @@ pub mod get_transactions_since_id {
     #[allow(unused_imports)]
     use fxoanda_definitions::*;
     use std::error::Error;
-    use Client;
+    use crate::Client;
 
     #[derive(Debug, Serialize, Deserialize)]
     struct RequestHead {
         #[serde(rename = "Authorization", skip_serializing_if = "Option::is_none")]
         pub authorization: Option<String>,
 
-        #[serde(
-            rename = "AcceptDatetimeFormat",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "AcceptDatetimeFormat", skip_serializing_if = "Option::is_none")]
         pub accept_datetime_format: Option<String>,
     }
     impl RequestHead {
@@ -3731,27 +3609,24 @@ pub mod get_transactions_since_id {
             self
         }
 
-        pub fn remote(
+        pub async fn remote(
             self,
-            client: &Client,
+            client: &Client
         ) -> Result<GetTransactionsSinceIdResponse, Box<dyn Error>> {
-            let uri = self
-                .uri
-                .clone()
-                .replace("{accountID}", &self.path.account_id.unwrap());
+            let uri = self.uri.clone().replace("{accountID}", &self.path.account_id.unwrap());
             let url = format!("https://{host}{uri}", host = client.host, uri = uri);
-            let res = client
-                .reqwest
+            let res = client.reqwest
                 .get(&url)
                 .query(&self.query)
                 .bearer_auth(&client.authentication)
-                .send();
+                .send().await;
             match res {
                 Err(e) => Err(Box::new(e)),
-                Ok(response) => match response.json::<GetTransactionsSinceIdResponse>() {
-                    Err(e) => Err(Box::new(e)),
-                    Ok(j) => Ok(j),
-                },
+                Ok(response) =>
+                    match response.json::<GetTransactionsSinceIdResponse>().await {
+                        Err(e) => Err(Box::new(e)),
+                        Ok(j) => Ok(j),
+                    }
             }
         }
     }
@@ -3785,7 +3660,7 @@ pub mod stream_transactions {
     #[allow(unused_imports)]
     use fxoanda_definitions::*;
     use std::error::Error;
-    use Client;
+    use crate::Client;
 
     #[derive(Debug, Serialize, Deserialize)]
     struct RequestHead {
@@ -3875,24 +3750,24 @@ pub mod stream_transactions {
             self
         }
 
-        pub fn remote(self, client: &Client) -> Result<StreamTransactionsResponse, Box<dyn Error>> {
-            let uri = self
-                .uri
-                .clone()
-                .replace("{accountID}", &self.path.account_id.unwrap());
+        pub async fn remote(
+            self,
+            client: &Client
+        ) -> Result<StreamTransactionsResponse, Box<dyn Error>> {
+            let uri = self.uri.clone().replace("{accountID}", &self.path.account_id.unwrap());
             let url = format!("https://{host}{uri}", host = client.host, uri = uri);
-            let res = client
-                .reqwest
+            let res = client.reqwest
                 .get(&url)
                 .query(&self.query)
                 .bearer_auth(&client.authentication)
-                .send();
+                .send().await;
             match res {
                 Err(e) => Err(Box::new(e)),
-                Ok(response) => match response.json::<StreamTransactionsResponse>() {
-                    Err(e) => Err(Box::new(e)),
-                    Ok(j) => Ok(j),
-                },
+                Ok(response) =>
+                    match response.json::<StreamTransactionsResponse>().await {
+                        Err(e) => Err(Box::new(e)),
+                        Ok(j) => Ok(j),
+                    }
             }
         }
     }
@@ -3927,17 +3802,14 @@ pub mod get_prices {
     #[allow(unused_imports)]
     use fxoanda_definitions::*;
     use std::error::Error;
-    use Client;
+    use crate::Client;
 
     #[derive(Debug, Serialize, Deserialize)]
     struct RequestHead {
         #[serde(rename = "Authorization", skip_serializing_if = "Option::is_none")]
         pub authorization: Option<String>,
 
-        #[serde(
-            rename = "AcceptDatetimeFormat",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "AcceptDatetimeFormat", skip_serializing_if = "Option::is_none")]
         pub accept_datetime_format: Option<String>,
     }
     impl RequestHead {
@@ -3980,16 +3852,10 @@ pub mod get_prices {
         )]
         pub since: Option<DateTime<Utc>>,
 
-        #[serde(
-            rename = "includeUnitsAvailable",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "includeUnitsAvailable", skip_serializing_if = "Option::is_none")]
         pub include_units_available: Option<bool>,
 
-        #[serde(
-            rename = "includeHomeConversions",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "includeHomeConversions", skip_serializing_if = "Option::is_none")]
         pub include_home_conversions: Option<bool>,
     }
     impl RequestQuery {
@@ -4104,24 +3970,21 @@ pub mod get_prices {
             self
         }
 
-        pub fn remote(self, client: &Client) -> Result<GetPricesResponse, Box<dyn Error>> {
-            let uri = self
-                .uri
-                .clone()
-                .replace("{accountID}", &self.path.account_id.unwrap());
+        pub async fn remote(self, client: &Client) -> Result<GetPricesResponse, Box<dyn Error>> {
+            let uri = self.uri.clone().replace("{accountID}", &self.path.account_id.unwrap());
             let url = format!("https://{host}{uri}", host = client.host, uri = uri);
-            let res = client
-                .reqwest
+            let res = client.reqwest
                 .get(&url)
                 .query(&self.query)
                 .bearer_auth(&client.authentication)
-                .send();
+                .send().await;
             match res {
                 Err(e) => Err(Box::new(e)),
-                Ok(response) => match response.json::<GetPricesResponse>() {
-                    Err(e) => Err(Box::new(e)),
-                    Ok(j) => Ok(j),
-                },
+                Ok(response) =>
+                    match response.json::<GetPricesResponse>().await {
+                        Err(e) => Err(Box::new(e)),
+                        Ok(j) => Ok(j),
+                    }
             }
         }
     }
@@ -4170,17 +4033,14 @@ pub mod stream_pricing {
     #[allow(unused_imports)]
     use fxoanda_definitions::*;
     use std::error::Error;
-    use Client;
+    use crate::Client;
 
     #[derive(Debug, Serialize, Deserialize)]
     struct RequestHead {
         #[serde(rename = "Authorization", skip_serializing_if = "Option::is_none")]
         pub authorization: Option<String>,
 
-        #[serde(
-            rename = "AcceptDatetimeFormat",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "AcceptDatetimeFormat", skip_serializing_if = "Option::is_none")]
         pub accept_datetime_format: Option<String>,
     }
     impl RequestHead {
@@ -4311,24 +4171,24 @@ pub mod stream_pricing {
             self
         }
 
-        pub fn remote(self, client: &Client) -> Result<StreamPricingResponse, Box<dyn Error>> {
-            let uri = self
-                .uri
-                .clone()
-                .replace("{accountID}", &self.path.account_id.unwrap());
+        pub async fn remote(
+            self,
+            client: &Client
+        ) -> Result<StreamPricingResponse, Box<dyn Error>> {
+            let uri = self.uri.clone().replace("{accountID}", &self.path.account_id.unwrap());
             let url = format!("https://{host}{uri}", host = client.host, uri = uri);
-            let res = client
-                .reqwest
+            let res = client.reqwest
                 .get(&url)
                 .query(&self.query)
                 .bearer_auth(&client.authentication)
-                .send();
+                .send().await;
             match res {
                 Err(e) => Err(Box::new(e)),
-                Ok(response) => match response.json::<StreamPricingResponse>() {
-                    Err(e) => Err(Box::new(e)),
-                    Ok(j) => Ok(j),
-                },
+                Ok(response) =>
+                    match response.json::<StreamPricingResponse>().await {
+                        Err(e) => Err(Box::new(e)),
+                        Ok(j) => Ok(j),
+                    }
             }
         }
     }
@@ -4365,17 +4225,14 @@ pub mod get_account_instrument_candles {
     #[allow(unused_imports)]
     use fxoanda_definitions::*;
     use std::error::Error;
-    use Client;
+    use crate::Client;
 
     #[derive(Debug, Serialize, Deserialize)]
     struct RequestHead {
         #[serde(rename = "Authorization", skip_serializing_if = "Option::is_none")]
         pub authorization: Option<String>,
 
-        #[serde(
-            rename = "AcceptDatetimeFormat",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "AcceptDatetimeFormat", skip_serializing_if = "Option::is_none")]
         pub accept_datetime_format: Option<String>,
     }
     impl RequestHead {
@@ -4645,27 +4502,24 @@ pub mod get_account_instrument_candles {
             self
         }
 
-        pub fn remote(
+        pub async fn remote(
             self,
-            client: &Client,
+            client: &Client
         ) -> Result<GetAccountInstrumentCandlesResponse, Box<dyn Error>> {
-            let uri = self
-                .uri
-                .clone()
-                .replace("{instrument}", &self.path.instrument.unwrap());
+            let uri = self.uri.clone().replace("{instrument}", &self.path.instrument.unwrap());
             let url = format!("https://{host}{uri}", host = client.host, uri = uri);
-            let res = client
-                .reqwest
+            let res = client.reqwest
                 .get(&url)
                 .query(&self.query)
                 .bearer_auth(&client.authentication)
-                .send();
+                .send().await;
             match res {
                 Err(e) => Err(Box::new(e)),
-                Ok(response) => match response.json::<GetAccountInstrumentCandlesResponse>() {
-                    Err(e) => Err(Box::new(e)),
-                    Ok(j) => Ok(j),
-                },
+                Ok(response) =>
+                    match response.json::<GetAccountInstrumentCandlesResponse>().await {
+                        Err(e) => Err(Box::new(e)),
+                        Ok(j) => Ok(j),
+                    }
             }
         }
     }
@@ -4703,17 +4557,14 @@ pub mod create_market_order {
     #[allow(unused_imports)]
     use fxoanda_definitions::*;
     use std::error::Error;
-    use Client;
+    use crate::Client;
 
     #[derive(Debug, Serialize, Deserialize)]
     struct RequestHead {
         #[serde(rename = "Authorization", skip_serializing_if = "Option::is_none")]
         pub authorization: Option<String>,
 
-        #[serde(
-            rename = "AcceptDatetimeFormat",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "AcceptDatetimeFormat", skip_serializing_if = "Option::is_none")]
         pub accept_datetime_format: Option<String>,
     }
     impl RequestHead {
@@ -4817,25 +4668,25 @@ pub mod create_market_order {
             self
         }
 
-        pub fn remote(self, client: &Client) -> Result<CreateMarketOrderResponse, Box<dyn Error>> {
-            let uri = self
-                .uri
-                .clone()
-                .replace("{accountID}", &self.path.account_id.unwrap());
+        pub async fn remote(
+            self,
+            client: &Client
+        ) -> Result<CreateMarketOrderResponse, Box<dyn Error>> {
+            let uri = self.uri.clone().replace("{accountID}", &self.path.account_id.unwrap());
             let url = format!("https://{host}{uri}", host = client.host, uri = uri);
-            let res = client
-                .reqwest
+            let res = client.reqwest
                 .post(&url)
                 .query(&self.query)
                 .json::<RequestBody>(&self.body)
                 .bearer_auth(&client.authentication)
-                .send();
+                .send().await;
             match res {
                 Err(e) => Err(Box::new(e)),
-                Ok(response) => match response.json::<CreateMarketOrderResponse>() {
-                    Err(e) => Err(Box::new(e)),
-                    Ok(j) => Ok(j),
-                },
+                Ok(response) =>
+                    match response.json::<CreateMarketOrderResponse>().await {
+                        Err(e) => Err(Box::new(e)),
+                        Ok(j) => Ok(j),
+                    }
             }
         }
     }
@@ -4858,45 +4709,27 @@ pub mod create_market_order {
     pub struct CreateMarketOrderResponse200Body {
         /// The base Transaction specification. Specifies properties that are
         /// common between all Transaction.
-        #[serde(
-            rename = "orderCreateTransaction",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "orderCreateTransaction", skip_serializing_if = "Option::is_none")]
         pub order_create_transaction: Option<Transaction>,
         /// An OrderFillTransaction represents the filling of an Order in the
         /// client's Account.
-        #[serde(
-            rename = "orderFillTransaction",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "orderFillTransaction", skip_serializing_if = "Option::is_none")]
         pub order_fill_transaction: Option<OrderFillTransaction>,
         /// An OrderCancelTransaction represents the cancellation of an Order in
         /// the client's Account.
-        #[serde(
-            rename = "orderCancelTransaction",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "orderCancelTransaction", skip_serializing_if = "Option::is_none")]
         pub order_cancel_transaction: Option<OrderCancelTransaction>,
         /// The base Transaction specification. Specifies properties that are
         /// common between all Transaction.
-        #[serde(
-            rename = "orderReissueTransaction",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "orderReissueTransaction", skip_serializing_if = "Option::is_none")]
         pub order_reissue_transaction: Option<Transaction>,
         /// The base Transaction specification. Specifies properties that are
         /// common between all Transaction.
-        #[serde(
-            rename = "orderReissueRejectTransaction",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "orderReissueRejectTransaction", skip_serializing_if = "Option::is_none")]
         pub order_reissue_reject_transaction: Option<Transaction>,
         /// The IDs of all Transactions that were created while satisfying the
         /// request.
-        #[serde(
-            rename = "relatedTransactionIDs",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "relatedTransactionIDs", skip_serializing_if = "Option::is_none")]
         pub related_transaction_i_ds: Option<Vec<String>>,
         /// The ID of the most recent Transaction created for the Account
         /// format: String representation of the numerical OANDA-assigned TransactionID
@@ -4911,17 +4744,14 @@ pub mod create_limit_order {
     #[allow(unused_imports)]
     use fxoanda_definitions::*;
     use std::error::Error;
-    use Client;
+    use crate::Client;
 
     #[derive(Debug, Serialize, Deserialize)]
     struct RequestHead {
         #[serde(rename = "Authorization", skip_serializing_if = "Option::is_none")]
         pub authorization: Option<String>,
 
-        #[serde(
-            rename = "AcceptDatetimeFormat",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "AcceptDatetimeFormat", skip_serializing_if = "Option::is_none")]
         pub accept_datetime_format: Option<String>,
     }
     impl RequestHead {
@@ -5025,25 +4855,25 @@ pub mod create_limit_order {
             self
         }
 
-        pub fn remote(self, client: &Client) -> Result<CreateLimitOrderResponse, Box<dyn Error>> {
-            let uri = self
-                .uri
-                .clone()
-                .replace("{accountID}", &self.path.account_id.unwrap());
+        pub async fn remote(
+            self,
+            client: &Client
+        ) -> Result<CreateLimitOrderResponse, Box<dyn Error>> {
+            let uri = self.uri.clone().replace("{accountID}", &self.path.account_id.unwrap());
             let url = format!("https://{host}{uri}", host = client.host, uri = uri);
-            let res = client
-                .reqwest
+            let res = client.reqwest
                 .post(&url)
                 .query(&self.query)
                 .json::<RequestBody>(&self.body)
                 .bearer_auth(&client.authentication)
-                .send();
+                .send().await;
             match res {
                 Err(e) => Err(Box::new(e)),
-                Ok(response) => match response.json::<CreateLimitOrderResponse>() {
-                    Err(e) => Err(Box::new(e)),
-                    Ok(j) => Ok(j),
-                },
+                Ok(response) =>
+                    match response.json::<CreateLimitOrderResponse>().await {
+                        Err(e) => Err(Box::new(e)),
+                        Ok(j) => Ok(j),
+                    }
             }
         }
     }
@@ -5066,45 +4896,27 @@ pub mod create_limit_order {
     pub struct CreateLimitOrderResponse200Body {
         /// The base Transaction specification. Specifies properties that are
         /// common between all Transaction.
-        #[serde(
-            rename = "orderCreateTransaction",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "orderCreateTransaction", skip_serializing_if = "Option::is_none")]
         pub order_create_transaction: Option<Transaction>,
         /// An OrderFillTransaction represents the filling of an Order in the
         /// client's Account.
-        #[serde(
-            rename = "orderFillTransaction",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "orderFillTransaction", skip_serializing_if = "Option::is_none")]
         pub order_fill_transaction: Option<OrderFillTransaction>,
         /// An OrderCancelTransaction represents the cancellation of an Order in
         /// the client's Account.
-        #[serde(
-            rename = "orderCancelTransaction",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "orderCancelTransaction", skip_serializing_if = "Option::is_none")]
         pub order_cancel_transaction: Option<OrderCancelTransaction>,
         /// The base Transaction specification. Specifies properties that are
         /// common between all Transaction.
-        #[serde(
-            rename = "orderReissueTransaction",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "orderReissueTransaction", skip_serializing_if = "Option::is_none")]
         pub order_reissue_transaction: Option<Transaction>,
         /// The base Transaction specification. Specifies properties that are
         /// common between all Transaction.
-        #[serde(
-            rename = "orderReissueRejectTransaction",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "orderReissueRejectTransaction", skip_serializing_if = "Option::is_none")]
         pub order_reissue_reject_transaction: Option<Transaction>,
         /// The IDs of all Transactions that were created while satisfying the
         /// request.
-        #[serde(
-            rename = "relatedTransactionIDs",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "relatedTransactionIDs", skip_serializing_if = "Option::is_none")]
         pub related_transaction_i_ds: Option<Vec<String>>,
         /// The ID of the most recent Transaction created for the Account
         /// format: String representation of the numerical OANDA-assigned TransactionID
@@ -5119,17 +4931,14 @@ pub mod create_stop_order {
     #[allow(unused_imports)]
     use fxoanda_definitions::*;
     use std::error::Error;
-    use Client;
+    use crate::Client;
 
     #[derive(Debug, Serialize, Deserialize)]
     struct RequestHead {
         #[serde(rename = "Authorization", skip_serializing_if = "Option::is_none")]
         pub authorization: Option<String>,
 
-        #[serde(
-            rename = "AcceptDatetimeFormat",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "AcceptDatetimeFormat", skip_serializing_if = "Option::is_none")]
         pub accept_datetime_format: Option<String>,
     }
     impl RequestHead {
@@ -5233,25 +5042,25 @@ pub mod create_stop_order {
             self
         }
 
-        pub fn remote(self, client: &Client) -> Result<CreateStopOrderResponse, Box<dyn Error>> {
-            let uri = self
-                .uri
-                .clone()
-                .replace("{accountID}", &self.path.account_id.unwrap());
+        pub async fn remote(
+            self,
+            client: &Client
+        ) -> Result<CreateStopOrderResponse, Box<dyn Error>> {
+            let uri = self.uri.clone().replace("{accountID}", &self.path.account_id.unwrap());
             let url = format!("https://{host}{uri}", host = client.host, uri = uri);
-            let res = client
-                .reqwest
+            let res = client.reqwest
                 .post(&url)
                 .query(&self.query)
                 .json::<RequestBody>(&self.body)
                 .bearer_auth(&client.authentication)
-                .send();
+                .send().await;
             match res {
                 Err(e) => Err(Box::new(e)),
-                Ok(response) => match response.json::<CreateStopOrderResponse>() {
-                    Err(e) => Err(Box::new(e)),
-                    Ok(j) => Ok(j),
-                },
+                Ok(response) =>
+                    match response.json::<CreateStopOrderResponse>().await {
+                        Err(e) => Err(Box::new(e)),
+                        Ok(j) => Ok(j),
+                    }
             }
         }
     }
@@ -5274,45 +5083,27 @@ pub mod create_stop_order {
     pub struct CreateStopOrderResponse200Body {
         /// The base Transaction specification. Specifies properties that are
         /// common between all Transaction.
-        #[serde(
-            rename = "orderCreateTransaction",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "orderCreateTransaction", skip_serializing_if = "Option::is_none")]
         pub order_create_transaction: Option<Transaction>,
         /// An OrderFillTransaction represents the filling of an Order in the
         /// client's Account.
-        #[serde(
-            rename = "orderFillTransaction",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "orderFillTransaction", skip_serializing_if = "Option::is_none")]
         pub order_fill_transaction: Option<OrderFillTransaction>,
         /// An OrderCancelTransaction represents the cancellation of an Order in
         /// the client's Account.
-        #[serde(
-            rename = "orderCancelTransaction",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "orderCancelTransaction", skip_serializing_if = "Option::is_none")]
         pub order_cancel_transaction: Option<OrderCancelTransaction>,
         /// The base Transaction specification. Specifies properties that are
         /// common between all Transaction.
-        #[serde(
-            rename = "orderReissueTransaction",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "orderReissueTransaction", skip_serializing_if = "Option::is_none")]
         pub order_reissue_transaction: Option<Transaction>,
         /// The base Transaction specification. Specifies properties that are
         /// common between all Transaction.
-        #[serde(
-            rename = "orderReissueRejectTransaction",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "orderReissueRejectTransaction", skip_serializing_if = "Option::is_none")]
         pub order_reissue_reject_transaction: Option<Transaction>,
         /// The IDs of all Transactions that were created while satisfying the
         /// request.
-        #[serde(
-            rename = "relatedTransactionIDs",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "relatedTransactionIDs", skip_serializing_if = "Option::is_none")]
         pub related_transaction_i_ds: Option<Vec<String>>,
         /// The ID of the most recent Transaction created for the Account
         /// format: String representation of the numerical OANDA-assigned TransactionID
@@ -5327,17 +5118,14 @@ pub mod list_orders {
     #[allow(unused_imports)]
     use fxoanda_definitions::*;
     use std::error::Error;
-    use Client;
+    use crate::Client;
 
     #[derive(Debug, Serialize, Deserialize)]
     struct RequestHead {
         #[serde(rename = "Authorization", skip_serializing_if = "Option::is_none")]
         pub authorization: Option<String>,
 
-        #[serde(
-            rename = "AcceptDatetimeFormat",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "AcceptDatetimeFormat", skip_serializing_if = "Option::is_none")]
         pub accept_datetime_format: Option<String>,
     }
     impl RequestHead {
@@ -5498,24 +5286,21 @@ pub mod list_orders {
             self
         }
 
-        pub fn remote(self, client: &Client) -> Result<ListOrdersResponse, Box<dyn Error>> {
-            let uri = self
-                .uri
-                .clone()
-                .replace("{accountID}", &self.path.account_id.unwrap());
+        pub async fn remote(self, client: &Client) -> Result<ListOrdersResponse, Box<dyn Error>> {
+            let uri = self.uri.clone().replace("{accountID}", &self.path.account_id.unwrap());
             let url = format!("https://{host}{uri}", host = client.host, uri = uri);
-            let res = client
-                .reqwest
+            let res = client.reqwest
                 .get(&url)
                 .query(&self.query)
                 .bearer_auth(&client.authentication)
-                .send();
+                .send().await;
             match res {
                 Err(e) => Err(Box::new(e)),
-                Ok(response) => match response.json::<ListOrdersResponse>() {
-                    Err(e) => Err(Box::new(e)),
-                    Ok(j) => Ok(j),
-                },
+                Ok(response) =>
+                    match response.json::<ListOrdersResponse>().await {
+                        Err(e) => Err(Box::new(e)),
+                        Ok(j) => Ok(j),
+                    }
             }
         }
     }
@@ -5552,17 +5337,14 @@ pub mod list_pending_orders {
     #[allow(unused_imports)]
     use fxoanda_definitions::*;
     use std::error::Error;
-    use Client;
+    use crate::Client;
 
     #[derive(Debug, Serialize, Deserialize)]
     struct RequestHead {
         #[serde(rename = "Authorization", skip_serializing_if = "Option::is_none")]
         pub authorization: Option<String>,
 
-        #[serde(
-            rename = "AcceptDatetimeFormat",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "AcceptDatetimeFormat", skip_serializing_if = "Option::is_none")]
         pub accept_datetime_format: Option<String>,
     }
     impl RequestHead {
@@ -5656,24 +5438,24 @@ pub mod list_pending_orders {
             self
         }
 
-        pub fn remote(self, client: &Client) -> Result<ListPendingOrdersResponse, Box<dyn Error>> {
-            let uri = self
-                .uri
-                .clone()
-                .replace("{accountID}", &self.path.account_id.unwrap());
+        pub async fn remote(
+            self,
+            client: &Client
+        ) -> Result<ListPendingOrdersResponse, Box<dyn Error>> {
+            let uri = self.uri.clone().replace("{accountID}", &self.path.account_id.unwrap());
             let url = format!("https://{host}{uri}", host = client.host, uri = uri);
-            let res = client
-                .reqwest
+            let res = client.reqwest
                 .get(&url)
                 .query(&self.query)
                 .bearer_auth(&client.authentication)
-                .send();
+                .send().await;
             match res {
                 Err(e) => Err(Box::new(e)),
-                Ok(response) => match response.json::<ListPendingOrdersResponse>() {
-                    Err(e) => Err(Box::new(e)),
-                    Ok(j) => Ok(j),
-                },
+                Ok(response) =>
+                    match response.json::<ListPendingOrdersResponse>().await {
+                        Err(e) => Err(Box::new(e)),
+                        Ok(j) => Ok(j),
+                    }
             }
         }
     }
@@ -5707,17 +5489,14 @@ pub mod get_order {
     #[allow(unused_imports)]
     use fxoanda_definitions::*;
     use std::error::Error;
-    use Client;
+    use crate::Client;
 
     #[derive(Debug, Serialize, Deserialize)]
     struct RequestHead {
         #[serde(rename = "Authorization", skip_serializing_if = "Option::is_none")]
         pub authorization: Option<String>,
 
-        #[serde(
-            rename = "AcceptDatetimeFormat",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "AcceptDatetimeFormat", skip_serializing_if = "Option::is_none")]
         pub accept_datetime_format: Option<String>,
     }
     impl RequestHead {
@@ -5827,25 +5606,24 @@ pub mod get_order {
             self
         }
 
-        pub fn remote(self, client: &Client) -> Result<GetOrderResponse, Box<dyn Error>> {
-            let uri = self
-                .uri
+        pub async fn remote(self, client: &Client) -> Result<GetOrderResponse, Box<dyn Error>> {
+            let uri = self.uri
                 .clone()
                 .replace("{accountID}", &self.path.account_id.unwrap())
                 .replace("{orderSpecifier}", &self.path.order_specifier.unwrap());
             let url = format!("https://{host}{uri}", host = client.host, uri = uri);
-            let res = client
-                .reqwest
+            let res = client.reqwest
                 .get(&url)
                 .query(&self.query)
                 .bearer_auth(&client.authentication)
-                .send();
+                .send().await;
             match res {
                 Err(e) => Err(Box::new(e)),
-                Ok(response) => match response.json::<GetOrderResponse>() {
-                    Err(e) => Err(Box::new(e)),
-                    Ok(j) => Ok(j),
-                },
+                Ok(response) =>
+                    match response.json::<GetOrderResponse>().await {
+                        Err(e) => Err(Box::new(e)),
+                        Ok(j) => Ok(j),
+                    }
             }
         }
     }
@@ -5883,17 +5661,14 @@ pub mod replace_order {
     #[allow(unused_imports)]
     use fxoanda_definitions::*;
     use std::error::Error;
-    use Client;
+    use crate::Client;
 
     #[derive(Debug, Serialize, Deserialize)]
     struct RequestHead {
         #[serde(rename = "Authorization", skip_serializing_if = "Option::is_none")]
         pub authorization: Option<String>,
 
-        #[serde(
-            rename = "AcceptDatetimeFormat",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "AcceptDatetimeFormat", skip_serializing_if = "Option::is_none")]
         pub accept_datetime_format: Option<String>,
 
         #[serde(rename = "ClientRequestID", skip_serializing_if = "Option::is_none")]
@@ -6028,26 +5803,25 @@ pub mod replace_order {
             self
         }
 
-        pub fn remote(self, client: &Client) -> Result<ReplaceOrderResponse, Box<dyn Error>> {
-            let uri = self
-                .uri
+        pub async fn remote(self, client: &Client) -> Result<ReplaceOrderResponse, Box<dyn Error>> {
+            let uri = self.uri
                 .clone()
                 .replace("{accountID}", &self.path.account_id.unwrap())
                 .replace("{orderSpecifier}", &self.path.order_specifier.unwrap());
             let url = format!("https://{host}{uri}", host = client.host, uri = uri);
-            let res = client
-                .reqwest
+            let res = client.reqwest
                 .put(&url)
                 .query(&self.query)
                 .json::<RequestBody>(&self.body)
                 .bearer_auth(&client.authentication)
-                .send();
+                .send().await;
             match res {
                 Err(e) => Err(Box::new(e)),
-                Ok(response) => match response.json::<ReplaceOrderResponse>() {
-                    Err(e) => Err(Box::new(e)),
-                    Ok(j) => Ok(j),
-                },
+                Ok(response) =>
+                    match response.json::<ReplaceOrderResponse>().await {
+                        Err(e) => Err(Box::new(e)),
+                        Ok(j) => Ok(j),
+                    }
             }
         }
     }
@@ -6070,38 +5844,23 @@ pub mod replace_order {
     pub struct ReplaceOrderResponse200Body {
         /// An OrderCancelTransaction represents the cancellation of an Order in
         /// the client's Account.
-        #[serde(
-            rename = "orderCancelTransaction",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "orderCancelTransaction", skip_serializing_if = "Option::is_none")]
         pub order_cancel_transaction: Option<OrderCancelTransaction>,
         /// The base Transaction specification. Specifies properties that are
         /// common between all Transaction.
-        #[serde(
-            rename = "orderCreateTransaction",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "orderCreateTransaction", skip_serializing_if = "Option::is_none")]
         pub order_create_transaction: Option<Transaction>,
         /// An OrderFillTransaction represents the filling of an Order in the
         /// client's Account.
-        #[serde(
-            rename = "orderFillTransaction",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "orderFillTransaction", skip_serializing_if = "Option::is_none")]
         pub order_fill_transaction: Option<OrderFillTransaction>,
         /// The base Transaction specification. Specifies properties that are
         /// common between all Transaction.
-        #[serde(
-            rename = "orderReissueTransaction",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "orderReissueTransaction", skip_serializing_if = "Option::is_none")]
         pub order_reissue_transaction: Option<Transaction>,
         /// The base Transaction specification. Specifies properties that are
         /// common between all Transaction.
-        #[serde(
-            rename = "orderReissueRejectTransaction",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "orderReissueRejectTransaction", skip_serializing_if = "Option::is_none")]
         pub order_reissue_reject_transaction: Option<Transaction>,
         /// An OrderCancelTransaction represents the cancellation of an Order in
         /// the client's Account.
@@ -6112,10 +5871,7 @@ pub mod replace_order {
         pub replacing_order_cancel_transaction: Option<OrderCancelTransaction>,
         /// The IDs of all Transactions that were created while satisfying the
         /// request.
-        #[serde(
-            rename = "relatedTransactionIDs",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "relatedTransactionIDs", skip_serializing_if = "Option::is_none")]
         pub related_transaction_i_ds: Option<Vec<String>>,
         /// The ID of the most recent Transaction created for the Account
         /// format: String representation of the numerical OANDA-assigned TransactionID
@@ -6130,17 +5886,14 @@ pub mod cancel_order {
     #[allow(unused_imports)]
     use fxoanda_definitions::*;
     use std::error::Error;
-    use Client;
+    use crate::Client;
 
     #[derive(Debug, Serialize, Deserialize)]
     struct RequestHead {
         #[serde(rename = "Authorization", skip_serializing_if = "Option::is_none")]
         pub authorization: Option<String>,
 
-        #[serde(
-            rename = "AcceptDatetimeFormat",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "AcceptDatetimeFormat", skip_serializing_if = "Option::is_none")]
         pub accept_datetime_format: Option<String>,
 
         #[serde(rename = "ClientRequestID", skip_serializing_if = "Option::is_none")]
@@ -6262,26 +6015,25 @@ pub mod cancel_order {
             self
         }
 
-        pub fn remote(self, client: &Client) -> Result<CancelOrderResponse, Box<dyn Error>> {
-            let uri = self
-                .uri
+        pub async fn remote(self, client: &Client) -> Result<CancelOrderResponse, Box<dyn Error>> {
+            let uri = self.uri
                 .clone()
                 .replace("{accountID}", &self.path.account_id.unwrap())
                 .replace("{orderSpecifier}", &self.path.order_specifier.unwrap());
             let url = format!("https://{host}{uri}", host = client.host, uri = uri);
-            let res = client
-                .reqwest
+            let res = client.reqwest
                 .put(&url)
                 .query(&self.query)
                 .json::<RequestBody>(&self.body)
                 .bearer_auth(&client.authentication)
-                .send();
+                .send().await;
             match res {
                 Err(e) => Err(Box::new(e)),
-                Ok(response) => match response.json::<CancelOrderResponse>() {
-                    Err(e) => Err(Box::new(e)),
-                    Ok(j) => Ok(j),
-                },
+                Ok(response) =>
+                    match response.json::<CancelOrderResponse>().await {
+                        Err(e) => Err(Box::new(e)),
+                        Ok(j) => Ok(j),
+                    }
             }
         }
     }
@@ -6301,17 +6053,11 @@ pub mod cancel_order {
     pub struct CancelOrderResponse200Body {
         /// An OrderCancelTransaction represents the cancellation of an Order in
         /// the client's Account.
-        #[serde(
-            rename = "orderCancelTransaction",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "orderCancelTransaction", skip_serializing_if = "Option::is_none")]
         pub order_cancel_transaction: Option<OrderCancelTransaction>,
         /// The IDs of all Transactions that were created while satisfying the
         /// request.
-        #[serde(
-            rename = "relatedTransactionIDs",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "relatedTransactionIDs", skip_serializing_if = "Option::is_none")]
         pub related_transaction_i_ds: Option<Vec<String>>,
         /// The ID of the most recent Transaction created for the Account
         /// format: String representation of the numerical OANDA-assigned TransactionID
@@ -6326,17 +6072,14 @@ pub mod set_order_client_extensions {
     #[allow(unused_imports)]
     use fxoanda_definitions::*;
     use std::error::Error;
-    use Client;
+    use crate::Client;
 
     #[derive(Debug, Serialize, Deserialize)]
     struct RequestHead {
         #[serde(rename = "Authorization", skip_serializing_if = "Option::is_none")]
         pub authorization: Option<String>,
 
-        #[serde(
-            rename = "AcceptDatetimeFormat",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "AcceptDatetimeFormat", skip_serializing_if = "Option::is_none")]
         pub accept_datetime_format: Option<String>,
     }
     impl RequestHead {
@@ -6370,10 +6113,7 @@ pub mod set_order_client_extensions {
         #[serde(rename = "clientExtensions", skip_serializing_if = "Option::is_none")]
         pub client_extensions: Option<ClientExtensions>,
 
-        #[serde(
-            rename = "tradeClientExtensions",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "tradeClientExtensions", skip_serializing_if = "Option::is_none")]
         pub trade_client_extensions: Option<ClientExtensions>,
     }
     impl RequestBody {
@@ -6412,7 +6152,7 @@ pub mod set_order_client_extensions {
         pub fn new() -> SetOrderClientExtensionsRequest {
             SetOrderClientExtensionsRequest {
                 uri: String::from(
-                    "/v3/accounts/{accountID}/orders/{orderSpecifier}/clientExtensions",
+                    "/v3/accounts/{accountID}/orders/{orderSpecifier}/clientExtensions"
                 ),
                 header: RequestHead::new(),
                 body: RequestBody::new(),
@@ -6482,29 +6222,28 @@ pub mod set_order_client_extensions {
             self
         }
 
-        pub fn remote(
+        pub async fn remote(
             self,
-            client: &Client,
+            client: &Client
         ) -> Result<SetOrderClientExtensionsResponse, Box<dyn Error>> {
-            let uri = self
-                .uri
+            let uri = self.uri
                 .clone()
                 .replace("{accountID}", &self.path.account_id.unwrap())
                 .replace("{orderSpecifier}", &self.path.order_specifier.unwrap());
             let url = format!("https://{host}{uri}", host = client.host, uri = uri);
-            let res = client
-                .reqwest
+            let res = client.reqwest
                 .put(&url)
                 .query(&self.query)
                 .json::<RequestBody>(&self.body)
                 .bearer_auth(&client.authentication)
-                .send();
+                .send().await;
             match res {
                 Err(e) => Err(Box::new(e)),
-                Ok(response) => match response.json::<SetOrderClientExtensionsResponse>() {
-                    Err(e) => Err(Box::new(e)),
-                    Ok(j) => Ok(j),
-                },
+                Ok(response) =>
+                    match response.json::<SetOrderClientExtensionsResponse>().await {
+                        Err(e) => Err(Box::new(e)),
+                        Ok(j) => Ok(j),
+                    }
             }
         }
     }
@@ -6528,18 +6267,14 @@ pub mod set_order_client_extensions {
             rename = "orderClientExtensionsModifyTransaction",
             skip_serializing_if = "Option::is_none"
         )]
-        pub order_client_extensions_modify_transaction:
-            Option<OrderClientExtensionsModifyTransaction>,
+        pub order_client_extensions_modify_transaction: Option<OrderClientExtensionsModifyTransaction>,
         /// The ID of the most recent Transaction created for the Account
         /// format: String representation of the numerical OANDA-assigned TransactionID
         #[serde(rename = "lastTransactionID", skip_serializing_if = "Option::is_none")]
         pub last_transaction_id: Option<String>,
         /// The IDs of all Transactions that were created while satisfying the
         /// request.
-        #[serde(
-            rename = "relatedTransactionIDs",
-            skip_serializing_if = "Option::is_none"
-        )]
+        #[serde(rename = "relatedTransactionIDs", skip_serializing_if = "Option::is_none")]
         pub related_transaction_i_ds: Option<Vec<String>>,
     }
 }
