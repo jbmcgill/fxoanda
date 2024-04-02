@@ -1,18 +1,18 @@
 [package]
 name = "fxoanda"
-version = "0.1.3"
-authors = ["James McGill <jbmcgill@gmail.com>"]
+version = "0.2.0"
+authors = ["James McGill <jbmcgill@gmail.com>", "Ben Letchford <ben@letchford.capital>"]
 description = "Library to conduct currency conversion with the Oanda API"
 license = "MIT/Apache-2.0"
+edition = "2021"
 
 [dependencies]
-reqwest = {version = "0.10.6", features = ["blocking","json"]}
+reqwest = {version = "0.12.2", features = ["json"]}
+tokio = { version = "1.37.0", features = ["macros", "time", "rt-multi-thread"] }
 serde_json = "1.0"
 serde = "1.0.83"
 serde_derive = "1.0.83"
 chrono = {version = "0.4.6", features = ["serde"] }
-time = "0.1.42"
-fxoanda_definitions = {path = "fxoanda_definitions/", version="0.1.0"}
-fxoanda_serdes = {path = "fxoanda_serdes/", version="0.1.0"}
-
-
+time = "0.3.34"
+fxoanda_definitions = {path = "fxoanda_definitions/", version="0.1.1"}
+fxoanda_serdes = {path = "fxoanda_serdes/", version="0.1.1"}

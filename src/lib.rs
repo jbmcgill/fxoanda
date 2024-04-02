@@ -7,32 +7,35 @@
 //!
 //! # Installation
 //!
-//! ```
-//!  cargo install fxoanda
+//! ```bash
+//! $ cargo add fxoanda
 //! ```
 //!
 //! # Example usage
 //!
 //! ```
+//! use std::env;
 //! use fxoanda::*;
 //!
-//! let api_key = env::var("OANDA_KEY").expect("expected OANDA_KEY environment variable to be set");
-//! let api_host = env::var("OANDA_HOST").expect("expected OANDA_HOST environment variable to be set");
+//! #[tokio::main]
+//! async fn main() {
+//!     let api_key = env::var("OANDA_KEY").expect("expected OANDA_KEY environment variable to be set");
+//!     let api_host = env::var("OANDA_HOST").expect("expected OANDA_HOST environment variable to be set");
 //!
-//! let client = fxoanda::Client {
-//!                host: String::from(api_host),
-//!                reqwest: reqwest::blocking::Client::new(),
-//!                authentication: String::from(api_key),
-//!              };
-//! match fxoanda::GetInstrumentCandlesRequest::new()
+//!     let client = fxoanda::Client {
+//!         host: String::from(api_host),
+//!         reqwest: reqwest::Client::new(),
+//!         authentication: String::from(api_key),
+//!     };
+//!     match fxoanda::GetInstrumentCandlesRequest::new()
 //!         .with_instrument("EUR_USD".to_string())
 //!         .with_granularity(CandlestickGranularity::H4)
-//!         .remote(&client)
-//!    {
-//!        Ok(x) => println!("OK: {:#?}", x),
-//!        Err(e) => eprintln!("ERR: {:#?}", e),
-//!    };
-//!
+//!         .remote(&client).await
+//!     {
+//!         Ok(x) => println!("OK: {:#?}", x),
+//!         Err(e) => eprintln!("ERR: {:#?}", e),
+//!     };
+//! }
 //! ```
 //!
 //! # Warning

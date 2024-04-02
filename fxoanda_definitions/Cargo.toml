@@ -1,6 +1,6 @@
 [package]
 name = "fxoanda_definitions"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["James McGill <jbmcgill@gmail.com>"]
 edition = "2018"
 description = "Library to conduct currency conversion with the Oanda API"
@@ -11,5 +11,5 @@ serde_json = "1.0"
 serde = "1.0.83"
 serde_derive = "1.0.83"
 chrono = {version = "0.4.6", features = ["serde"] }
-time = "0.1.42"
+time = "0.3.34"
 fxoanda_serdes = {version="0.1.0", path = "../fxoanda_serdes/" }

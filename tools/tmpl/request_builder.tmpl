@@ -3,7 +3,7 @@ pub mod {{ snake }}{
 	#[allow(unused_imports)]
 	use chrono::prelude::*;
 	use std::error::Error;
-	use Client;
+	use crate::Client;
 	#[allow(unused_imports)]
 	use fxoanda_definitions::*;
 
@@ -58,18 +58,18 @@ pub mod {{ snake }}{
 	  }
 	{% endfor %}
 
-		pub fn remote(self, client: &Client) -> Result<{{ name }}Response, Box<dyn Error>> {
+		pub async fn remote(self, client: &Client) -> Result<{{ name }}Response, Box<dyn Error>> {
 	    let uri = self.uri.clone(){% for o in params['path'] %}
 		      .replace("{{ "{" }}{{ o['name'] }}{{ "}" }}", &self.path.{{ o['snake'] }}.unwrap()){% endfor %};
 	    let url = format!("https://{host}{uri}", host=client.host, uri=uri);
 		  let res = client.reqwest.{{ method }}(&url)
 				      .query(&self.query){% if method in ["put","post","patch"] %}.json::<RequestBody>(&self.body){% endif %}
 						.bearer_auth(&client.authentication)
-						  .send();
+						  .send().await;
 	    match res {
 	      Err(e) => Err(Box::new(e)),
 	      Ok(response) => { 
-		match response.json::<{{ name }}Response>() {
+		match response.json::<{{ name }}Response>().await {
 		  Err(e) => Err(Box::new(e)),
 		  Ok(j) => Ok(j),
 		}
